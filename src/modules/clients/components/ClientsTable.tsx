@@ -15,13 +15,9 @@ const ClientsTable = async ({
   const clientsAction = new ClientService();
   const clients = await clientsAction.getAllClients(searchParams);
 
-  const { data, meta } = clients;
+  const { data, metadata } = clients;
 
-  return (
-    // <div className="border rounded-2xl p-1 border-gray-200 dark:border-gray-700">
-    <ClientsTableClient data={data} meta={meta} />
-    // </div>
-  );
+  return <ClientsTableClient data={data} meta={metadata} />;
 };
 
 export default ClientsTable;

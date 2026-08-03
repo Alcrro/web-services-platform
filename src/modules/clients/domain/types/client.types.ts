@@ -14,4 +14,12 @@ export interface IClient {
   deletedAt?: Date;
 }
 
+export interface IClientsStats {
+  totalClients: number;
+  activeClients: number;
+  inactiveClients: number;
+  newLast30Days: number;
+  totalOrders: number;
+}
+
 export type ICLientFIlters = IFilters<IClient>;

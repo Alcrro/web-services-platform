@@ -7,7 +7,7 @@ export class ClientAPI extends BaseAPI {
 
   async getAllClients(
     param: string
-  ): Promise<{ data: IClient[]; meta: IMetaPagination }> {
+  ): Promise<{ data: IClient[]; metadata: IMetaPagination }> {
     return this.request(`${param}`, {
       method: "GET",
     });

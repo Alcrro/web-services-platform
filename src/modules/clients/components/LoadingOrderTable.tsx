@@ -1,5 +1,4 @@
-import { mapSearchParamsOptions } from "@/modules/orders/infrastructure/searchParamsToFilter";
-import { IFiltersServiceOrders } from "@/modules/orders/domain/types/order.types";
+import { mapOrdersSearchParams } from "@/modules/orders/infrastructure/searchParamsToFilter";
 import LoadingOrderTableColumnClient from "../../../components/organisms/LoadingOrderTableColumnClient";
 import { OrdersAction } from "@/modules/orders/application/orders.action";
 
@@ -10,12 +9,10 @@ const LoadingOrderTable = async ({
 }) => {
   const params = searchParams || {};
 
-  const options: IFiltersServiceOrders = mapSearchParamsOptions(params);
-
-  // console.log(options);
   const ordersAction = new OrdersAction();
-
-  const orders = await ordersAction.getAllTableOrders(options);
+  const orders = await ordersAction.getAllTableOrdersWithParams(
+    mapOrdersSearchParams(params)
+  );
 
   const { data, meta } = orders;
 

@@ -1,5 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-import { IClient, ICLientFIlters } from "../domain/types/client.types";
+import { IClient, ICLientFIlters, IClientsStats } from "../domain/types/client.types";
 import { clientMapperDocToDom } from "./client.mapper";
 import { ClientRepository } from "../domain/repositories/client.repository.interface";
 
@@ -125,6 +125,33 @@ export class ClientRepositoryImpl implements ClientRepository {
       throw new RepositoryError("Failed to update client");
     }
   }
+  async getStats(): Promise<IClientsStats> {
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+
+    const [totalClients, activeClients, totalOrders, newLast30Days] =
+      await Promise.all([
+        this.db.client.count({ where: { isDeleted: false } }),
+        this.db.client.count({
+          where: {
+            isDeleted: false,
+            orders: { some: { isDeleted: false } },
+          },
+        }),
+        this.db.serviceOrder.count({ where: { isDeleted: false } }),
+        this.db.client.count({
+          where: { isDeleted: false, createdAt: { gte: thirtyDaysAgo } },
+        }),
+      ]);
+
+    return {
+      totalClients,
+      activeClients,
+      inactiveClients: totalClients - activeClients,
+      newLast30Days,
+      totalOrders,
+    };
+  }
+
   async delete(clientId: string): Promise<Partial<IClient>> {
     try {
       const result = await this.db.client.delete({
