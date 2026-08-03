@@ -1,13 +1,17 @@
-import { Feature, Prisma, ServiceOrderItem } from "@prisma/client";
 import {
+  Feature,
+  Prisma,
   Service,
   ServiceFeature,
-} from "../../../../prisma/app/generated/prisma/client";
+  ServiceOrderItem,
+  ServicePricingConfig,
+} from "@prisma/client";
 import {
   IFeature,
   IPackageName,
   IService,
   IServiceFeature,
+  IServicePricingConfig,
 } from "../domain/types/service.types";
 import { IServiceOrderItem } from "@/modules/orders/domain/types/order.types";
 import { JsonObject } from "@prisma/client/runtime/library";
@@ -52,9 +56,28 @@ export function serviceFeatureDomToDoc(
   };
 }
 
+export function pricingConfigDocToDom(
+  config: ServicePricingConfig
+): IServicePricingConfig {
+  return {
+    id: config.id.toString(),
+    serviceId: config.serviceId.toString(),
+    hourlyRate: config.hourlyRate.toNumber(),
+    markupRate: config.markupRate.toNumber(),
+    fixedCosts: config.fixedCosts.toNumber(),
+    taxRate: config.taxRate.toNumber(),
+    displayPrice: config.displayPrice ? config.displayPrice.toNumber() : null,
+    displayModel: config.displayModel,
+    currency: config.currency,
+    createdAt: config.createdAt,
+    updatedAt: config.updatedAt,
+  };
+}
+
 export function serviceMapperDocToDom(
   service: Service & {
     serviceFeatures: (ServiceFeature & { feature: Feature })[];
+    pricingConfig?: ServicePricingConfig | null;
   }
 ): IService {
   return {
@@ -68,10 +91,13 @@ export function serviceMapperDocToDom(
     slug: service.slug,
     description: service.description,
     isHighlight: service.isHighlight ?? false,
-    initialPrice: service.initialPrice.toNumber() ?? 0,
+    pricingConfig: service.pricingConfig
+      ? pricingConfigDocToDom(service.pricingConfig)
+      : null,
     serviceFeatures: service.serviceFeatures.map(serviceFeatureDoToDom),
   };
 }
+
 export function serviceMapperDomToDoc(service: IService): Service {
   return {
     id: Number(service.id),
@@ -84,8 +110,6 @@ export function serviceMapperDomToDoc(service: IService): Service {
     slug: service.slug,
     description: service.description,
     isHighlight: service.isHighlight ?? false,
-    initialPrice: new Prisma.Decimal(service.initialPrice) ?? 0,
-    // serviceFeatures: service.serviceFeatures.map(serviceFeatureDomToDoc),
   };
 }
 
@@ -93,10 +117,13 @@ export function servicePartialMapperDoc(
   service: Partial<IService>
 ): Partial<Service> {
   return {
-    ...service,
     id: Number(service.id),
     uniqueId: service.uniqueId as IPackageName,
-    initialPrice: new Prisma.Decimal(service.initialPrice ?? 0) ?? 0,
+    name: service.name,
+    slug: service.slug,
+    description: service.description,
+    isHighlight: service.isHighlight,
+    isDeleted: service.isDeleted,
   };
 }
 

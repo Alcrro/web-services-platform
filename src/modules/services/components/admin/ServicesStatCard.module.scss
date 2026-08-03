@@ -1,0 +1,94 @@
+.card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-section);
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 0.75rem 0.75rem 0 0;
+  }
+}
+
+.iconContainer {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Indigo ───────────────────────────── */
+.indigo {
+  background-image: linear-gradient(145deg, rgba(129, 140, 248, 0.07), transparent);
+  box-shadow: 0 8px 32px -8px rgba(129, 140, 248, 0.3), 0 2px 8px -2px rgba(0, 0, 0, 0.2);
+
+  &::before {
+    background: linear-gradient(90deg, #818cf8, transparent);
+  }
+
+  .iconContainer {
+    background: rgba(129, 140, 248, 0.15);
+    box-shadow: 0 0 16px -4px #818cf8;
+    color: #818cf8;
+  }
+}
+
+/* ── Emerald ──────────────────────────── */
+.emerald {
+  background-image: linear-gradient(145deg, rgba(52, 211, 153, 0.07), transparent);
+  box-shadow: 0 8px 32px -8px rgba(52, 211, 153, 0.3), 0 2px 8px -2px rgba(0, 0, 0, 0.2);
+
+  &::before {
+    background: linear-gradient(90deg, #34d399, transparent);
+  }
+
+  .iconContainer {
+    background: rgba(52, 211, 153, 0.15);
+    box-shadow: 0 0 16px -4px #34d399;
+    color: #34d399;
+  }
+}
+
+/* ── Blue ─────────────────────────────── */
+.blue {
+  background-image: linear-gradient(145deg, rgba(96, 165, 250, 0.07), transparent);
+  box-shadow: 0 8px 32px -8px rgba(96, 165, 250, 0.3), 0 2px 8px -2px rgba(0, 0, 0, 0.2);
+
+  &::before {
+    background: linear-gradient(90deg, #60a5fa, transparent);
+  }
+
+  .iconContainer {
+    background: rgba(96, 165, 250, 0.15);
+    box-shadow: 0 0 16px -4px #60a5fa;
+    color: #60a5fa;
+  }
+}
+
+/* ── Amber ────────────────────────────── */
+.amber {
+  background-image: linear-gradient(145deg, rgba(251, 191, 36, 0.07), transparent);
+  box-shadow: 0 8px 32px -8px rgba(251, 191, 36, 0.3), 0 2px 8px -2px rgba(0, 0, 0, 0.2);
+
+  &::before {
+    background: linear-gradient(90deg, #fbbf24, transparent);
+  }
+
+  .iconContainer {
+    background: rgba(251, 191, 36, 0.15);
+    box-shadow: 0 0 16px -4px #fbbf24;
+    color: #fbbf24;
+  }
+}

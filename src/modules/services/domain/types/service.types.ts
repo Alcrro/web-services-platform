@@ -5,6 +5,22 @@ import {
   IStatusMapperType,
 } from "@/modules/orders/domain/types/order.types.ts";
 
+export type IPriceDisplayModel = "ONE_TIME" | "SUBSCRIPTION" | "CONTACT";
+
+export interface IServicePricingConfig {
+  id: string;
+  serviceId: string;
+  hourlyRate: number;
+  markupRate: number;
+  fixedCosts: number;
+  taxRate: number;
+  displayPrice: number | null;
+  displayModel: IPriceDisplayModel;
+  currency: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface IService {
   id: string;
   uniqueId: IPackageName;
@@ -12,7 +28,7 @@ export interface IService {
   slug: string;
   description: string;
   serviceFeatures: IServiceFeature[];
-  initialPrice: number;
+  pricingConfig?: IServicePricingConfig | null;
   isDeleted: boolean | false;
   createdAt: Date;
   updatedAt?: Date;
@@ -103,6 +119,26 @@ export type WebsitePackage = {
 
 export type WebPackFeature = { id: string; name: string; hours: number };
 
+export interface IUpsertServiceFeatureInput {
+  serviceId: string;
+  featureId: string;
+  type: IFeatureType;
+  hours: number;
+  unitPrice: number;
+  isIncluded: boolean;
+  quantity?: number;
+}
+
+export interface IPricingConfigInput {
+  hourlyRate: number;
+  markupRate: number;
+  fixedCosts: number;
+  taxRate: number;
+  displayPrice?: number | null;
+  displayModel: IPriceDisplayModel;
+  currency: string;
+}
+
 export type IFilterServices = IFilters<IService>;
 
 export const serviceNameHeaderColumnMapper = {
@@ -113,6 +149,27 @@ export const serviceNameHeaderColumnMapper = {
   "crm-application": "CRM Application",
   "automation-scripts": "Automation & Scripts",
 } as const;
+
+export interface IServiceStat {
+  id: string;
+  name: string;
+  uniqueId: string;
+  displayModel: IPriceDisplayModel | null;
+  displayPrice: number | null;
+  currency: string;
+  orderCount: number;
+  featureCount: number;
+  isHighlight: boolean;
+  hasPricing: boolean;
+}
+
+export interface IServicesStats {
+  totalServices: number;
+  configuredPricing: number;
+  contactServices: number;
+  totalOrders: number;
+  services: IServiceStat[];
+}
 
 export interface IServiceOrderTable {
   id: string;
