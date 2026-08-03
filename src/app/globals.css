@@ -14,10 +14,14 @@
   --color-border: #e5e7eb;
   --color-accent: #2563eb;
   --color-accent-hover: #1d4ed8;
+  --color-accent-deep: #1e40af;
   --color-success: #10b981;
   --color-warning: #f59e0b; /* amber */
   --color-error: #ef4444; /* red */
   --color-info: #3b82f6; /* blue */
+  --color-skeleton: #e2e8f0;
+  --gradient-hero-from: #2563eb;
+  --gradient-hero-to: #7c3aed;
 
   /* fonts */
   --font-sans: Inter, Arial, Helvetica, sans-serif;
@@ -65,10 +69,14 @@
   --color-border: #1e293b;
   --color-accent: #3b82f6;
   --color-accent-hover: #60a5fa;
+  --color-accent-deep: #2563eb;
   --color-success: #34d399;
   --color-warning: #fbbf24;
   --color-error: #f87171;
   --color-info: #60a5fa;
+  --color-skeleton: #334155;
+  --gradient-hero-from: #60a5fa;
+  --gradient-hero-to: #a78bfa;
 
   --gradient-start: #41f6e7;
   --gradient-end: #3623df;
@@ -109,6 +117,52 @@ pre {
 .animate-fadeIn {
   animation: fadeIn 0.4s ease-in-out forwards;
 }
+
+.text-gradient-hero {
+  background: linear-gradient(135deg, var(--gradient-hero-from), var(--gradient-hero-to));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-blob-main {
+  background: linear-gradient(135deg, var(--gradient-hero-from), var(--gradient-hero-to));
+}
+.hero-blob-secondary {
+  background: var(--gradient-hero-to);
+}
+.hero-blob-tertiary {
+  background: var(--gradient-hero-from);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.anim-fade-up   { animation: fadeInUp   0.55s cubic-bezier(.22,.68,0,1.2) both; }
+.anim-fade-left { animation: fadeInLeft 0.55s cubic-bezier(.22,.68,0,1.2) both; }
+.anim-fade-right{ animation: fadeInRight 0.55s cubic-bezier(.22,.68,0,1.2) both; }
+.anim-scale-in  { animation: scaleIn    0.45s cubic-bezier(.22,.68,0,1.2) both; }
+
+.anim-delay-100 { animation-delay: 100ms; }
+.anim-delay-200 { animation-delay: 200ms; }
+.anim-delay-300 { animation-delay: 300ms; }
+.anim-delay-350 { animation-delay: 350ms; }
+.anim-delay-400 { animation-delay: 400ms; }
+.anim-delay-500 { animation-delay: 500ms; }
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

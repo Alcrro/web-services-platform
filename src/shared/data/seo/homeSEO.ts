@@ -1,10 +1,20 @@
+import { BRAND } from "@/shared/config/brand";
+
 export const homePageSEO = {
-  title: "Professional Web, App & Automation Services | YourCompany",
+  title: `Professional Web, App & AI Development Services | ${BRAND.name}`,
   description:
-    "We build websites, applications, and automation scripts for businesses. Fast, scalable, SEO-ready, and tailored to your needs.",
+    "We build websites, applications, AI chatbots, and automation pipelines for businesses. Fast, scalable, SEO-ready, and powered by OpenAI, Claude, and Gemini APIs.",
+  url: BRAND.url,
   keywords: [
     "web development",
     "app development",
+    "AI development",
+    "AI chatbot development",
+    "OpenAI integration",
+    "Claude API integration",
+    "LLM integration",
+    "AI automation",
+    "custom AI tools",
     "automation scripts",
     "SEO services",
     "custom websites",
@@ -12,26 +22,4 @@ export const homePageSEO = {
     "business applications",
     "scalable web development",
   ],
-  openGraph: {
-    title: "Professional Web, App & Automation Services | YourCompany",
-    description:
-      "Explore our professional web, app, and automation services. Modern, responsive, and tailored for your business success.",
-    url: "https://yourcompany.com",
-    type: "website",
-    images: [
-      {
-        url: "https://yourcompany.com/images/og/homepage.jpg",
-        width: 1200,
-        height: 630,
-        alt: "YourCompany homepage showcase",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Professional Web, App & Automation Services | YourCompany",
-    description:
-      "We create custom websites, applications, and automation solutions that scale with your business.",
-    images: ["https://yourcompany.com/images/og/homepage.jpg"],
-  },
 };

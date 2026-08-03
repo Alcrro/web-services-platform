@@ -1,5 +1,3 @@
-// commons/consts/services/servicesPageContent.ts
-
 export const servicesPageContent: ServicesPageContent = {
   hero: {
     title: "Our Services",
@@ -10,28 +8,31 @@ export const servicesPageContent: ServicesPageContent = {
       href: "/contact",
     },
   },
-  benefits: [
-    {
-      title: "🚀 Fast Delivery",
-      description:
-        "Agile workflow ensures quick turnarounds without sacrificing quality.",
-    },
-    {
-      title: "🎯 Custom Solutions",
-      description:
-        "Tailored services that fit your exact business needs and goals.",
-    },
-    {
-      title: "🔒 Secure & Scalable",
-      description:
-        "Enterprise-level security practices and scalable architecture.",
-    },
-    {
-      title: "💬 Transparent Communication",
-      description:
-        "Stay updated at every stage with clear and open communication.",
-    },
-  ],
+  benefits: {
+    title: "Why Choose Me",
+    items: [
+      {
+        title: "Fast Delivery",
+        description:
+          "Agile workflow ensures quick turnarounds without sacrificing quality.",
+      },
+      {
+        title: "Custom Solutions",
+        description:
+          "Tailored services that fit your exact business needs and goals.",
+      },
+      {
+        title: "Secure & Scalable",
+        description:
+          "Enterprise-level security practices and scalable architecture.",
+      },
+      {
+        title: "Transparent Communication",
+        description:
+          "Stay updated at every stage with clear and open communication.",
+      },
+    ],
+  },
   process: {
     title: "How It Works",
     steps: [
@@ -76,7 +77,8 @@ export const servicesPageContent: ServicesPageContent = {
   },
   cta: {
     title: "Ready to bring your project to life?",
-    button: { text: "Let’s Work Together", href: "/contact" },
+    subtitle: "No commitment required. Clear scope and timeline within 24 hours.",
+    button: { text: "Let's Work Together", href: "/contact" },
   },
 };
 
@@ -92,6 +94,11 @@ export interface ServiceHeroSection {
 export interface ServiceBenefitItem {
   title: string;
   description: string;
+}
+
+export interface ServiceBenefitsSection {
+  title: string;
+  items: ServiceBenefitItem[];
 }
 
 export interface ServiceProcessStep {
@@ -117,6 +124,7 @@ export interface ServiceFaqSection {
 
 export interface ServiceCtaSection {
   title: string;
+  subtitle: string;
   button: {
     text: string;
     href: string;
@@ -125,7 +133,7 @@ export interface ServiceCtaSection {
 
 export interface ServicesPageContent {
   hero: ServiceHeroSection;
-  benefits: ServiceBenefitItem[];
+  benefits: ServiceBenefitsSection;
   process: ServiceProcessSection;
   faq: ServiceFaqSection;
   cta: ServiceCtaSection;

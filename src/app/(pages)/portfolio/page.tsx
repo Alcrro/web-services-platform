@@ -8,11 +8,13 @@ import { portfolioPageContent } from "@/shared/data/consts/portfololioPage/portf
 import { buildSEO } from "@/lib/seo/seo.utils";
 import dynamic from "next/dynamic";
 
+const Testimonials = dynamic(
+  () => import("@/components/organisms/portfolio/TestimonialsSection"),
+  { ssr: true }
+);
+
 export async function generateMetadata(): Promise<Metadata> {
-  return {
-    ...buildSEO(portfolioSEO),
-    alternates: { canonical: "/portfolio" },
-  };
+  return buildSEO(portfolioSEO);
 }
 
 const Portfolio = async ({
@@ -25,26 +27,24 @@ const Portfolio = async ({
 
   const { hero, projects, filters, testimonials, cta } = portfolioPageContent;
 
-  // Filter projects server-side
   const filteredProjects =
     searchParamsValue === undefined || searchParamsValue === "all"
       ? projects
       : projects.filter((p) => p.category === searchParamsValue);
 
-  // Lazy-load Testimonials
-  const Testimonials = dynamic(
-    () => import("@/components/organisms/portfolio/TestimonialsSection"),
-    { ssr: true }
-  );
-
   return (
     <DefaultLayout>
       <main className="space-y-24 mx-auto">
-        {/* Hero Section */}
-        <section className="text-center space-y-4">
-          <HeroSection {...hero} />
+        {/* Hero */}
+        <section className="relative text-center py-24 md:py-32 overflow-hidden">
+          <div className="pointer-events-none absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full bg-(--color-accent) opacity-[0.07] blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-32 -right-40 w-96 h-96 rounded-full bg-(--gradient-hero-to) opacity-[0.07] blur-3xl" />
+          <div className="relative space-y-6">
+            <HeroSection {...hero} />
+          </div>
         </section>
-        {/* Filters && Projects Grid */}
+
+        {/* Filters + Projects Grid */}
         <section aria-label="Portfolio Projects">
           <PortfolioProjectsClient
             projects={filteredProjects}
@@ -52,22 +52,27 @@ const Portfolio = async ({
             activeFilter={searchParamsValue}
           />
         </section>
+
         {/* Testimonials */}
         {testimonials && (
           <section aria-label="Testimonials">
             <Testimonials testimonials={testimonials} />
           </section>
         )}
-        {/* Final CTA */}
+
+        {/* CTA */}
         <section
-          className="text-center py-16 rounded-3xl shadow-lg bg-(--color-accent) text-(--color-bg)"
+          className="relative text-center py-20 px-8 rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-(--color-accent) to-(--color-accent-deep)"
           aria-label="Call to Action"
         >
-          <PortfolioCta
-            buttonHref={cta.button.href}
-            buttonText={cta.button.text}
-            title={cta.title}
-          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/15 to-transparent" />
+          <div className="relative space-y-2">
+            <PortfolioCta
+              buttonHref={cta.button.href}
+              buttonText={cta.button.text}
+              title={cta.title}
+            />
+          </div>
         </section>
       </main>
     </DefaultLayout>

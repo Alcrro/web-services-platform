@@ -1,4 +1,54 @@
 export const homePageContent: IHomePageContent = {
+  aiSection: {
+    title: "AI-Powered Development",
+    subtitle:
+      "We integrate leading AI tools into websites, apps, CRMs, and automation pipelines — powered by OpenAI, Claude, and Gemini APIs.",
+    tools: [
+      {
+        name: "AI Chatbot",
+        description:
+          "Custom chatbots powered by OpenAI or Claude API, trained on your business data and embedded directly in your site or app.",
+        icon: "Bot",
+      },
+      {
+        name: "AI Content Generation",
+        description:
+          "Automate blog posts, product descriptions, and marketing copy with LLM-powered generation tailored to your brand voice.",
+        icon: "PenLine",
+      },
+      {
+        name: "AI Email Automation",
+        description:
+          "Personalized email sequences and auto-replies generated and sent automatically based on user behavior and CRM data.",
+        icon: "Mail",
+      },
+      {
+        name: "AI Lead Scoring",
+        description:
+          "Score and prioritize CRM leads using AI models trained on your sales history to focus effort on the highest-value prospects.",
+        icon: "Target",
+      },
+      {
+        name: "AI Product Recommendations",
+        description:
+          "Increase e-commerce conversions with personalized product suggestions powered by real-time AI analysis of user behavior.",
+        icon: "ShoppingBag",
+      },
+      {
+        name: "AI Data Extraction",
+        description:
+          "Extract structured data from PDFs, emails, invoices, and documents automatically using OCR and LLM parsing pipelines.",
+        icon: "ScanLine",
+      },
+      {
+        name: "Custom LLM Integration",
+        description:
+          "Connect OpenAI, Claude, or Gemini APIs into any existing application, workflow, or internal tool — fully custom.",
+        icon: "Cpu",
+      },
+    ],
+  },
+
   hero: {
     title:
       "We build websites, applications, and scripts at a professional level",
@@ -14,21 +64,27 @@ export const homePageContent: IHomePageContent = {
     {
       name: "Web Development",
       description:
-        "Site-uri de prezentare, e-commerce, bloguri și platforme personalizate.",
+        "Presentation sites, e-commerce, blogs, and custom platforms built for performance.",
       icon: "FaGlobe",
       link: "/services/web",
     },
     {
       name: "App Development",
-      description: "Aplicații web și mobile pentru Android și iOS.",
+      description: "Web and mobile applications for Android and iOS.",
       icon: "FaMobileAlt",
       link: "/services/app",
     },
     {
-      name: "Scripts & Automatizări",
-      description: "Automatizări, API integrations, bots și tool-uri custom.",
+      name: "AI & Automation",
+      description: "AI integrations, automation scripts, bots, and custom tools.",
       icon: "FaCogs",
       link: "/services/scripts",
+    },
+    {
+      name: "SaaS Development",
+      description: "Full-stack SaaS products with auth, billing, and dashboards.",
+      icon: "FaServer",
+      link: "/services/saas",
     },
   ],
 
@@ -38,66 +94,31 @@ export const homePageContent: IHomePageContent = {
     { title: "Long-Term Scalability", icon: "FaChartLine" },
     { title: "Support & Maintenance", icon: "FaHeadset" },
   ],
+
   portfolio: {
     title: "Portfolio",
     projects: [
       {
         name: "E-commerce Shop",
-        image: "/images/portfolio/ecommerce.png",
-        link: "#",
+        image: "/images/portfolio/e-commerce.webp",
+        link: "/portfolio",
       },
       {
         name: "CRM Application",
-        image: "/images/portfolio/crm.png",
-        link: "#",
+        image: "/images/portfolio/crm.webp",
+        link: "/portfolio",
       },
       {
         name: "Automation Script",
-        image: "/images/portfolio/script.png",
-        link: "#",
+        image: "/images/portfolio/script.webp",
+        link: "/portfolio",
       },
     ],
   },
+
   testimonials: {
     title: "What Our Clients Say",
-    reviews: [
-      {
-        name: "Andrei Popescu",
-        role: "Founder",
-        text: "Working with this team was a game-changer. Fast delivery, great communication, and a solid final product.",
-        image: "/images/testimonials/andrei.jpg",
-      },
-      {
-        name: "Maria Ionescu",
-        role: "Marketing Manager",
-        text: "They understood our needs perfectly and delivered a beautiful, functional website that boosted our sales.",
-        image: "/images/testimonials/maria.png",
-      },
-      {
-        name: "Andrei Popescu",
-        role: "Founder",
-        text: "Working with this team was a game-changer. Fast delivery, great communication, and a solid final product.",
-        image: "/images/testimonials/andrei.jpg",
-      },
-      {
-        name: "Maria Ionescu",
-        role: "Marketing Manager",
-        text: "They understood our needs perfectly and delivered a beautiful, functional website that boosted our sales.",
-        image: "/images/testimonials/maria.png",
-      },
-      {
-        name: "Andrei Popescu",
-        role: "Founder",
-        text: "Working with this team was a game-changer. Fast delivery, great communication, and a solid final product.",
-        image: "/images/testimonials/andrei.jpg",
-      },
-      {
-        name: "Maria Ionescu",
-        role: "Marketing Manager",
-        text: "They understood our needs perfectly and delivered a beautiful, functional website that boosted our sales.",
-        image: "/images/testimonials/maria.png",
-      },
-    ],
+    reviews: [],
   },
 
   process: {
@@ -140,18 +161,6 @@ export const homePageContent: IHomePageContent = {
       },
     ],
   },
-  partners: [
-    {
-      name: "alexandru roventa",
-      logo: "/images/partners/netflix.png",
-      link: "https://alexandru-roventa.ro",
-    },
-    {
-      name: "lucruri utile",
-      logo: "",
-      link: "https://lucruri-utile.ro",
-    },
-  ],
 
   faq: [
     {
@@ -174,13 +183,25 @@ export const homePageContent: IHomePageContent = {
 
 export interface IHomePageContent {
   hero: IHomeHero;
+  aiSection: IHomeAISection;
   services: IHomeService[];
   portfolio: IHomePortfolio;
   benefits: IHomeBenefits[];
   testimonials: IHomeTestimonial;
   process: IHomeProcess;
-  partners: IHomePartners[];
   faq: IHomeFAQ[];
+}
+
+export interface IHomeAISection {
+  title: string;
+  subtitle: string;
+  tools: IHomeAITool[];
+}
+
+export interface IHomeAITool {
+  name: string;
+  description: string;
+  icon: string;
 }
 
 export interface IHomeHero {
@@ -224,7 +245,7 @@ export interface ITestimonialReview {
 }
 
 export interface IHomeProcess {
-  title: "How We Work";
+  title: string;
   steps: IProcessSteps[];
 }
 
@@ -238,12 +259,6 @@ export interface IProcessSteps {
 export interface IHomeBenefits {
   title: string;
   icon: string;
-}
-
-export interface IHomePartners {
-  name: string;
-  logo: string;
-  link?: string;
 }
 
 export interface IHomeFAQ {

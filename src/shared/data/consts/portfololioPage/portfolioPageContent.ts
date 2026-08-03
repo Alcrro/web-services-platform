@@ -3,6 +3,12 @@ export const portfolioPageContent: PortfolioPageContent = {
     title: "Our Portfolio",
     subtitle: "A showcase of projects where creativity meets technology.",
     cta: { text: "Request a Quote", href: "/contact" },
+    badge: "Our Work",
+    stats: [
+      { value: "20+", label: "Projects Delivered" },
+      { value: "4", label: "Tech Categories" },
+      { value: "100%", label: "Client Satisfaction" },
+    ],
   },
 
   filters: [
@@ -88,6 +94,11 @@ export const portfolioPageContent: PortfolioPageContent = {
   },
 };
 
+export interface PortfolioHeroStat {
+  value: string;
+  label: string;
+}
+
 export interface PortfolioHeroSection {
   title: string;
   subtitle: string;
@@ -95,6 +106,8 @@ export interface PortfolioHeroSection {
     text: string;
     href: string;
   };
+  badge: string;
+  stats: PortfolioHeroStat[];
 }
 
 export interface PortfolioFilterItem {

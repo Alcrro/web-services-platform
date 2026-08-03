@@ -1,8 +1,11 @@
 import FAQ from "@/components/organisms/home/FAQ";
-import PartnerList from "@/components/organisms/home/PartnerList";
 import ProcessWorkflow from "@/components/organisms/home/ProcessWorkflow";
 import HomeHero from "@/components/organisms/home/HomeHero";
-import Testimonials from "@/components/organisms/home/HomeTestimonials";
+import HomeTestimonials from "@/components/organisms/home/HomeTestimonials";
+import HomeServices from "@/components/organisms/home/HomeServices";
+import HomeAISection from "@/components/organisms/home/HomeAISection";
+import HomePortfolio from "@/components/organisms/home/HomePortfolio";
+import HomeBenefits from "@/components/organisms/home/HomeBenefits";
 import DefaultLayout from "@/components/templates/defaultLayout/DefaultLayout";
 import { homePageContent } from "@/shared/data/consts/homePage/homePageContent";
 import { Metadata } from "next";
@@ -14,7 +17,8 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  const { faq, hero, partners, process, testimonials } = homePageContent;
+  const { faq, hero, process, testimonials, services, portfolio, benefits, aiSection } =
+    homePageContent;
 
   return (
     <DefaultLayout>
@@ -22,13 +26,23 @@ export default function Home() {
         <HomeHero items={hero} />
       </section>
       <section>
+        <HomeServices services={services} />
+      </section>
+      <section aria-label="AI integration services">
+        <HomeAISection aiSection={aiSection} />
+      </section>
+      <section>
         <ProcessWorkflow process={process} />
       </section>
       <section>
-        <Testimonials testimonials={testimonials} />
+        <HomePortfolio portfolio={portfolio} />
       </section>
-      <section className="py-8">
-        <PartnerList partners={partners} />
+      <section>
+        {testimonials.reviews.length > 0 ? (
+          <HomeTestimonials testimonials={testimonials} />
+        ) : (
+          <HomeBenefits benefits={benefits} />
+        )}
       </section>
       <section>
         <FAQ faq={faq} />

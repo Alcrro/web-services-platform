@@ -7,7 +7,6 @@ import ServicesList from "@/components/molecules/service/card/ServicesList";
 // app/services/[slug]/page.tsx
 import { Metadata } from "next";
 import { servicesSEO } from "@/shared/data/seo/servicesSEO";
-import { generateSEO } from "@/lib/seo";
 import { buildSEO } from "@/lib/seo/seo.utils";
 import { SITE_URL } from "@/shared/config/env";
 import DefaultLayout from "@/components/templates/defaultLayout/DefaultLayout";
@@ -22,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const seo = servicesSEO.find((s) => s.id === id);
   if (!seo)
-    return generateSEO({
+    return buildSEO({
       title: "Service Not Found",
       description: "Service not found",
     });

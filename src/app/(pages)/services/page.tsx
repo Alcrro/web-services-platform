@@ -11,59 +11,41 @@ import DefaultLayout from "@/components/templates/defaultLayout/DefaultLayout";
 import { Suspense } from "react";
 import { Metadata } from "next";
 import { buildSEO } from "@/lib/seo/seo.utils";
-import { servicesSEO } from "@/shared/data/seo/servicesSEO";
+import { servicesListingPageSEO } from "@/shared/data/seo/servicesSEO";
 import ServiceCardSkeleton from "@/components/skeletons/ServiceCardSkeleton";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const seoObjects = servicesSEO.map(buildSEO);
-  const title = seoObjects.map((s) => s.title).join(" | ");
-  const description = seoObjects.map((s) => s.description).join(". ");
-  const openGraph = seoObjects[0].openGraph || {};
-
-  return {
-    title,
-    description,
-    openGraph,
-  };
+  return buildSEO(servicesListingPageSEO);
 }
+
 export default function ServicesPage() {
   const { hero, faq, benefits, process, cta } = servicesPageContent;
 
   return (
     <DefaultLayout>
-      <div className="flex flex-col gap-4">
-        {/* Hero */}
-        <section
-          aria-labelledby="services-heading"
-          className="text-center space-y-4"
-        >
+      <div className="flex flex-col gap-16">
+        <section aria-labelledby="services-heading" className="text-center">
           <ServiceHero hero={hero} />
         </section>
-
-        {/* Services Cards */}
 
         <Suspense fallback={<ServiceCardSkeleton />}>
           <ServicesList />
         </Suspense>
 
-        {/* Benefits */}
-        <section className="p-10 rounded-2xl shadow-inner bg-(--color-bg-section)">
+        <section className="px-8 py-12 rounded-2xl bg-(--color-bg-section)">
           <ServicesBenefits benefits={benefits} />
         </section>
 
-        {/* Process */}
-        <section aria-label="Our Process">
+        <section aria-label="Our Process" className="py-4">
           <ServiceProcess process={process} />
         </section>
 
-        {/* FAQ */}
-        <section aria-label="Frequently Asked Questions">
+        <section aria-label="Frequently Asked Questions" className="py-4">
           <ServiceFaq faq={faq} />
         </section>
 
-        {/* Final CTA */}
         <section
-          className="text-center py-16 rounded-3xl shadow-lg bg-(--color-accent) text-(--color-bg)"
+          className="text-center py-20 rounded-3xl bg-(--color-accent)"
           aria-label="Call to Action"
         >
           <ServiceCta cta={cta} />

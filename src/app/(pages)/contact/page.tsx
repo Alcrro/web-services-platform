@@ -17,22 +17,28 @@ const page = () => {
   const { hero, form, contactInfo, trust } = contactPageData;
   return (
     <DefaultLayout>
-      <main className="flex flex-col gap-8 py-4">
+      <main className="flex flex-col gap-12 py-6">
         <section aria-labelledby="contact-hero">
           <ContactHero hero={hero} />
         </section>
+
         <section aria-labelledby="contact-trust">
           <ContactTrust trust={trust} />
         </section>
+
         <section
-          aria-labelledby="contact-form"
+          aria-label="Contact form and info"
           id="form"
-          className="scroll-mt-5"
+          className="scroll-mt-5 mx-auto w-full max-w-6xl"
         >
-          <ContactForm form={form} />
-        </section>
-        <section aria-labelledby="contact-info">
-          <ContactInfo info={contactInfo} />
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[3fr_2fr] lg:items-stretch">
+            <div className="h-full">
+              <ContactForm form={form} />
+            </div>
+            <div className="h-full">
+              <ContactInfo info={contactInfo} />
+            </div>
+          </div>
         </section>
       </main>
     </DefaultLayout>

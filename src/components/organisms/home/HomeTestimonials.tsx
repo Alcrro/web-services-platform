@@ -1,8 +1,9 @@
+"use client";
 import { IHomeTestimonial } from "@/shared/data/consts/homePage/homePageContent";
-
 import style from "@/components/styles/testimonials.module.scss";
 import TestimonialCard from "../../molecules/Cards/testimonials/TestimonialCard";
 import TestimonialCarouselV2 from "./TestimonialCarouselV2";
+import { animStyle, useInView } from "@/shared/hooks/useInView";
 
 const HomeTestimonials = ({
   testimonials,
@@ -10,17 +11,26 @@ const HomeTestimonials = ({
   testimonials: IHomeTestimonial;
 }) => {
   const { reviews, title } = testimonials;
+  const { ref: titleRef, inView: titleIn, fromAbove: titleAbove } = useInView({ once: false });
+  const { ref: carouselRef, inView: carouselIn, fromAbove: carouselAbove } = useInView({ once: false, threshold: 0.05 });
 
   return (
     <div className={style.testimonials}>
-      <div className="title font-semibold text-2xl my-4 max-sm:text-center">
+      <div
+        ref={titleRef}
+        className="font-semibold text-2xl my-4 max-sm:text-center"
+        style={animStyle(titleIn, titleAbove)}
+      >
         {title}
       </div>
-      <TestimonialCarouselV2>
-        {reviews.map((review, i) => (
-          <TestimonialCard review={review} key={i} />
-        ))}
-      </TestimonialCarouselV2>
+
+      <div ref={carouselRef} style={animStyle(carouselIn, carouselAbove, 100)}>
+        <TestimonialCarouselV2>
+          {reviews.map((review) => (
+            <TestimonialCard review={review} key={review.name + review.role} />
+          ))}
+        </TestimonialCarouselV2>
+      </div>
     </div>
   );
 };
