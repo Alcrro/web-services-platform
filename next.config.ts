@@ -1,7 +1,6 @@
 /** @type {import("next").NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: "standalone",
   // Enable the most effective optimizations
   experimental: {
     optimizePackageImports: [
@@ -15,7 +14,6 @@ const nextConfig = {
   // Remove unnecessary JS in production
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
-    styledComponents: true, // Only if you use styled-components
   },
 
   // Reduce polyfills / reduce JS output size
