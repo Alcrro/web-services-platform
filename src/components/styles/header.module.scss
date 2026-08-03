@@ -1,45 +1,53 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
 .nav {
-  background-color: var(--color-bg-section);
+  background: color-mix(in srgb, var(--color-bg-section) 80%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
   color: var(--color-text-secondary);
   position: relative;
-  // overflow: hidden;
-  transition: border-radius 0.7s ease; // smooth animation
-  /* when checkbox is checked, open menu */
+  transition: border-radius 0.3s ease;
 
   @media (min-width: 88rem) {
-    margin-block: 1rem;
-    border-radius: 12px;
+    margin-inline: 1.25rem;
+    margin-block: 0.875rem;
+    border-radius: 14px;
+    border: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
   }
 
   &.isOpen {
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
-  /* hidden checkbox */
+
   .toggle-button {
     display: none;
   }
 
-  /* button styling */
   .toggle-label {
     display: none;
     cursor: pointer;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem;
     border-radius: 8px;
-    text-align: center;
+    color: var(--color-text-secondary);
+    transition: color 0.2s ease, background-color 0.2s ease;
+
+    &:hover {
+      color: var(--color-text);
+      background-color: var(--color-bg-hover);
+    }
   }
 
   @media (max-width: 720px) {
     .toggle-label {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-  }
-  &:has(.toggle-button:checked) .toggle-label {
-    background-color: var(--color-bg);
-  }
-
-  &:has(.toggle-button:checked) {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
   }
 }

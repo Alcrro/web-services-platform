@@ -44,7 +44,7 @@ const ServiceCardSkeleton = async () => {
           <div className="footer p-4 pt-0">
             <div className="flex justify-between items-center">
               <div className="animate-pulse rounded-xl bg-gray-400 text-transparent w-fit">
-                {service.initialPrice}
+                {service.pricingConfig?.displayPrice ?? null}
               </div>
               <div className="animate-pulse rounded-xl bg-gray-400 text-transparent w-fit">
                 {service.slug}

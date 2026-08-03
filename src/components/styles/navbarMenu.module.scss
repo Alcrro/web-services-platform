@@ -1,33 +1,35 @@
 .ul {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.25rem;
+
   @media (max-width: 720px) {
-    display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     position: absolute;
     top: 100%;
     left: 0;
     width: 100%;
-    z-index: 9999 !important;
-    background-color: var(--color-bg-section);
+    z-index: 9999;
+    background: color-mix(in srgb, var(--color-bg-section) 92%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
+    border-top: none;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
     padding: 0;
-    border-radius: 12px 12px;
-    max-height: 0; // start hidden
-    overflow: hidden; // hide content
-    opacity: 0; // invisible
-    transition: max-height 0.4s ease, opacity 0.4s ease, padding 0.4s ease;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.3s ease;
   }
 }
 
-/* When toggle is checked */
 .isOpen {
   @media (max-width: 720px) {
-    max-height: 500px;
+    max-height: 400px;
     opacity: 1;
-    padding: 1rem 0;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
+    padding: 0.75rem 0.75rem 1rem;
   }
 }
