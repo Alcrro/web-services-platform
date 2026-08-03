@@ -60,14 +60,14 @@ model Service {
   slug            String
   description     String
   isHighlight     Boolean      @default(false)
-  initialPrice    Decimal      @default(0)
   isDeleted       Boolean  @default(false)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @default(now()) @updatedAt
   deletedAt       DateTime?
   // Relations
- serviceFeatures ServiceFeature[]
-  orders ServiceOrder[]
+  serviceFeatures  ServiceFeature[]
+  orders           ServiceOrder[]
+  pricingConfig    ServicePricingConfig?
 }
 
 model Feature {
@@ -187,6 +187,30 @@ enum TaskStatus {
   IN_PROGRESS
   DONE
   TESTED
+}
+
+enum PriceDisplayModel {
+  ONE_TIME
+  SUBSCRIPTION
+  CONTACT
+}
+
+model ServicePricingConfig {
+  id           Int               @id @default(autoincrement())
+  serviceId    Int               @unique
+  service      Service           @relation(fields: [serviceId], references: [id])
+
+  hourlyRate   Decimal
+  markupRate   Decimal
+  fixedCosts   Decimal           @default(0)
+  taxRate      Decimal           @default(0.19)
+
+  displayPrice Decimal?
+  displayModel PriceDisplayModel @default(ONE_TIME)
+  currency     String            @default("USD")
+
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
 }
 
 model UiNotification {

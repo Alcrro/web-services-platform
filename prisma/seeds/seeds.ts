@@ -12,6 +12,25 @@ import type { IFeatureType } from "../../src/modules/services/domain/types/servi
 
 const servicesEnt = new ServicePrice();
 
+// displayPrice per service din datele statice (sursa de adevar pentru pretul afisat clientului)
+const displayPriceMap: Record<string, number | null> = {
+  "starter-website": 600,
+  "professional-website": 3200,
+  "e-commerce-website": 6200,
+  "premium-custom-website": null,
+  "crm-application": 2000,
+  "automation-scripts": 1200,
+};
+
+const displayModelMap: Record<string, "ONE_TIME" | "SUBSCRIPTION" | "CONTACT"> = {
+  "starter-website": "ONE_TIME",
+  "professional-website": "ONE_TIME",
+  "e-commerce-website": "ONE_TIME",
+  "premium-custom-website": "CONTACT",
+  "crm-application": "SUBSCRIPTION",
+  "automation-scripts": "ONE_TIME",
+};
+
 async function main() {
   for (const service of servicesV11) {
     const prices = servicesEnt.calculateServiceBreakdown(
@@ -20,15 +39,37 @@ async function main() {
       hourlyRates
     );
 
+    const cost = serviceCosts.find((f) => f.id === service.uniqueId)!;
+
     const createdService = await prisma.service.upsert({
       where: { name: service.name },
-      update: { initialPrice: prices.standardInitial },
+      update: {},
       create: {
         uniqueId: service.uniqueId,
         slug: service.slug,
         name: service.name,
         description: service.description,
-        initialPrice: prices.standardInitial,
+      },
+    });
+
+    await prisma.servicePricingConfig.upsert({
+      where: { serviceId: createdService.id },
+      update: {
+        hourlyRate: hourlyRates[service.uniqueId as keyof typeof hourlyRates] ?? 0,
+        markupRate: cost.profitMargin,
+        fixedCosts: cost.fixedCosts ?? 0,
+        taxRate: cost.taxRate,
+        displayPrice: displayPriceMap[service.uniqueId] ?? null,
+        displayModel: displayModelMap[service.uniqueId] ?? "ONE_TIME",
+      },
+      create: {
+        serviceId: createdService.id,
+        hourlyRate: hourlyRates[service.uniqueId as keyof typeof hourlyRates] ?? 0,
+        markupRate: cost.profitMargin,
+        fixedCosts: cost.fixedCosts ?? 0,
+        taxRate: cost.taxRate,
+        displayPrice: displayPriceMap[service.uniqueId] ?? null,
+        displayModel: displayModelMap[service.uniqueId] ?? "ONE_TIME",
       },
     });
 
