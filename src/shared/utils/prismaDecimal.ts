@@ -1,6 +1,6 @@
 // utils/prismaDecimal.ts
 
-import { Prisma } from "../../../prisma/app/generated/prisma/client/index.js";
+import { Prisma } from "@prisma/client";
 
 export const toDecimal = (value: number | undefined | null) =>
   new Prisma.Decimal(value ?? 0);

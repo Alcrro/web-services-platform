@@ -1,5 +1,5 @@
 import { IServiceOrderTable } from "@/modules/services/domain/types/service.types.ts";
-import { ServiceOrder } from "../../../../prisma/app/generated/prisma/client/index";
+import { ServiceOrder } from "@prisma/client";
 import {
   statusMapper,
   type IServiceOrder,
@@ -12,6 +12,7 @@ export function serviceOrderMapperDomainToDoc(
 ): ServiceOrder {
   return {
     id: order.id,
+    orderNo: order.orderNo ?? 0,
     projectName: order.projectName || "no Name",
     initialPrice: toDecimal(order.initialPrice),
     serviceId: Number(order.serviceId),

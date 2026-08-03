@@ -2,7 +2,7 @@ import { IServiceOrder } from "@/modules/orders/domain/types/order.types";
 import {
   Client,
   ServiceOrder,
-} from "../../../prisma/app/generated/prisma/client";
+} from "@prisma/client";
 
 export interface IPServiceOrder {
   order: ServiceOrder & {
