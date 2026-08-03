@@ -7,9 +7,6 @@ frontend:
     build:
       commands:
         - npm run build
-        - du -sh .next/* 2>/dev/null | sort -rh
-        - rm -rf .next/cache .next/standalone .next/trace .next/types
-        - du -sh .next 2>/dev/null
   artifacts:
     baseDirectory: .next
     files:
