@@ -4,8 +4,6 @@ export class AuthAPI extends BaseAPI {
   protected BASE_PATH = "/api/auth";
 
   async login(email: string, password: string) {
-    console.log(email, password);
-
     return this.request("/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
