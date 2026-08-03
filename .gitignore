@@ -44,3 +44,16 @@ next-env.d.ts
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+# Claude Code internals
+.claude/
+
+# Private docs / notes
+docs/
+todos/
+
+# Backup files
+*.backup
+
+# Prisma generated client (regenerat automat la npm install)
+prisma/app/generated/

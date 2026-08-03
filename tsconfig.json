@@ -40,5 +40,5 @@
     "test/CreateOrder.test.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "prisma"]
+  "exclude": ["node_modules", "prisma", "src/**/_deprecated/**"]
 }
