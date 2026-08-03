@@ -1,6 +1,7 @@
 "use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Button from "@/shared/ui/Button";
-
 import Title from "./components/Title";
 import { AuthAction } from "@/modules/auth/application/auth.action";
 import {
@@ -9,16 +10,31 @@ import {
 } from "@/modules/auth/application/validators/loginSchema";
 
 const page = () => {
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const authAction = new AuthAction();
-
-    const formData = Object.fromEntries(
-      new FormData(e.currentTarget)
-    ) as loginInput;
-
-    const validatedInputs = loginSchema.parse(formData);
-    await authAction.loginAction(validatedInputs);
+    setError(null);
+    setLoading(true);
+    try {
+      const authAction = new AuthAction();
+      const formData = Object.fromEntries(
+        new FormData(e.currentTarget)
+      ) as loginInput;
+      const validatedInputs = loginSchema.parse(formData);
+      const result = await authAction.loginAction(validatedInputs);
+      if (result.success) {
+        router.push("/administrator/control-panel");
+      } else {
+        setError(result.message);
+      }
+    } catch {
+      setError("Invalid credentials.");
+    } finally {
+      setLoading(false);
+    }
   }
   return (
     <div className="flex flex-col justify-center items-center h-[80vh] ">
@@ -45,8 +61,11 @@ const page = () => {
             />
           </div>
         </div>
-        <Button variant="primary" className="  mt-2">
-          Submit
+        {error && (
+          <p className="text-red-500 text-sm text-center">{error}</p>
+        )}
+        <Button variant="primary" className="mt-2" disabled={loading}>
+          {loading ? "Logging in..." : "Submit"}
         </Button>
       </form>
     </div>
