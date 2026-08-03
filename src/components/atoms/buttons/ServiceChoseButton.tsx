@@ -18,9 +18,10 @@ const ServiceChoseButton = ({ slug }: { slug: string }) => {
     <Button
       href={`/services/${slug}/configurator/features`}
       variant="primary"
+      className="w-full"
       onClick={handleClick}
     >
-      Chose
+      Choose
     </Button>
   );
 };

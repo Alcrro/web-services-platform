@@ -1,49 +1,29 @@
-import { navbarItems } from "@/shared/data/administrator/navbar/NavbarData";
-
-import SearchBar, { SearchItemProps } from "../molecules/SearchBar";
-import NotificationItem, {
-  NotificationItemProps,
-} from "../atoms/NotificationItem";
+import { Search, Home } from "lucide-react";
 import ThemeToggle from "@/components/atoms/buttons/ThemeToggle";
-import ProfileItem, {
-  ProfileItemProps,
-} from "../molecules/header/navbar/ProfileItem";
-
-interface NavbarItemMap {
-  search: React.FC<SearchItemProps>;
-  notifications: React.FC<NotificationItemProps>;
-  "theme-toggle": React.FC;
-  profile: React.FC<ProfileItemProps>;
-}
-
-const navbarMapper: NavbarItemMap = {
-  search: SearchBar,
-  notifications: NotificationItem,
-  "theme-toggle": ThemeToggle,
-  profile: ProfileItem,
-};
+import SearchBar from "@/components/molecules/SearchBar";
+import AdminBreadcrumb from "@/components/molecules/AdminBreadcrumb";
+import AdminNavProfile from "@/components/molecules/AdminNavProfile";
+import Link from "next/link";
 
 const ControlPanelNavbar = () => {
   return (
-    <div className="relative flex justify-between items-center p-4 bg-(--color-bg-section) rounded-xl">
-      <div>lasts link</div>
-      <div className=" menu_settings">
-        <ul className="flex gap-2 items-center ">
-          {navbarItems.map((item) => {
-            const Component = navbarMapper[item.type as keyof NavbarItemMap];
+    <div className="flex items-center justify-between px-5 py-3 bg-(--color-bg-section) rounded-xl">
+      <div className="flex items-center gap-3">
+        <Link
+          href="/"
+          className="flex items-center gap-1.5 text-sm text-(--color-text-secondary) hover:text-(--color-text) transition-colors"
+        >
+          <Home className="w-4 h-4" />
+          <span>Home</span>
+        </Link>
+        <span className="text-(--color-border)">·</span>
+        <AdminBreadcrumb />
+      </div>
 
-            switch (item.type) {
-              case "theme-toggle":
-                return <ThemeToggle key={item.type} />;
-              default:
-                return (
-                  <li className=" flex gap-2 items-center" key={item.type}>
-                    <Component {...item} />
-                  </li>
-                );
-            }
-          })}
-        </ul>
+      <div className="flex items-center gap-1">
+        <SearchBar type="search" label="Search" icon={Search} />
+        <ThemeToggle />
+        <AdminNavProfile />
       </div>
     </div>
   );

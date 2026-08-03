@@ -1,67 +1,71 @@
 import Link from "next/link";
 import { ReactNode } from "react";
 import style from "@/components/styles/serviceCard.module.scss";
-import ServicesPrice from "../../../atoms/service/ServicesPrice";
 import ServiceChoseButton from "../../../atoms/buttons/ServiceChoseButton";
 import { priceDisplay } from "@/shared/utils/formatServicesPrice";
-import { IService } from "@/modules/services/domain/types/service.types";
-import ServiceCardHeader from "../../Cards/services/ServiceCardHeader";
+import { IService, IPriceDisplayModel } from "@/modules/services/domain/types/service.types";
 import Boundary from "@/components/internalDev/Boundary";
+
+const displayModelLabel: Record<IPriceDisplayModel, string> = {
+  ONE_TIME: "One-time",
+  SUBSCRIPTION: "Subscription",
+  CONTACT: "Contact",
+};
 
 type ServiceCardProps = {
   service: IService;
   children: ReactNode;
-  href?: boolean; // optional, dacă nu există nu se face Link
+  href?: boolean;
 };
 
 const ServiceCard = ({ service, children, href }: ServiceCardProps) => {
+  const model = service.pricingConfig?.displayModel ?? "ONE_TIME";
+  const price = priceDisplay(
+    service.pricingConfig?.displayPrice ?? null,
+    service.uniqueId
+  );
+
   const CardContent = (
-    <div className="flex flex-col h-full  max-[320px]:p-4">
-      <div className="head text-center mb-4">
-        <ServiceCardHeader
-          description={service.description}
-          name={service.name}
-        />
-      </div>
+    <div className="flex flex-col h-full p-5 max-[320px]:p-3">
+      <span className="inline-block self-start text-xs font-medium px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-3">
+        {displayModelLabel[model]}
+      </span>
 
-      <div className="flex flex-col gap-2 justify-between h-full">
-        {children}
+      <h3 className="text-lg font-bold text-(--color-text) mb-1">
+        {service.name}
+      </h3>
+      <p className="text-sm text-gray-400 mb-4 line-clamp-2">
+        {service.description}
+      </p>
 
-        <div className="flex flex-col gap-1 text-sm text-gray-500 my-4 mt-auto"></div>
-      </div>
+      <p className="text-2xl font-bold text-(--color-text) mb-4">{price}</p>
+
+      <div className="h-px bg-gray-700/50 mb-4" />
+
+      <div className="flex-1 min-h-0">{children}</div>
     </div>
   );
 
   return (
     <article
-      className={`${
-        style.service_card
-      } flex flex-col justify-between border rounded-xl shadow-lg transition duration-300 h-[640px] p-2 ${
+      className={`${style.service_card} flex flex-col rounded-2xl border shadow-lg transition-all duration-300 h-full ${
         service.isHighlight
-          ? "border-blue-600 shadow-2xl scale-105 "
-          : "hover:shadow-xl"
+          ? "border-blue-500/60 shadow-blue-500/10 shadow-xl ring-1 ring-blue-500/20"
+          : "border-gray-700/50 hover:border-gray-600/70 hover:shadow-xl"
       }`}
     >
       {href ? (
-        <Link
-          href={`/services/${service.slug}`}
-          className="flex flex-col justify-between h-full p-4"
-        >
+        <Link href={`/services/${service.slug}`} className="flex flex-col flex-1">
           {CardContent}
         </Link>
       ) : (
         CardContent
       )}
 
-      <div className="footer p-4 pt-0">
-        <div className="flex justify-between items-center">
-          <ServicesPrice
-            price={priceDisplay(service.initialPrice, service.uniqueId)}
-          />
-          <Boundary hydration="client">
-            <ServiceChoseButton slug={service.slug} />
-          </Boundary>
-        </div>
+      <div className="px-5 pb-5 pt-2">
+        <Boundary hydration="client">
+          <ServiceChoseButton slug={service.slug} />
+        </Boundary>
       </div>
     </article>
   );

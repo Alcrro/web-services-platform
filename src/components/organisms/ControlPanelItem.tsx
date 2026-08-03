@@ -1,55 +1,38 @@
 "use client";
-import { useRef } from "react";
-import useCloseDiv from "@/shared/utils/useCloseDiv";
-import { useModalStore } from "@/context/modalStore";
-import { Users, ListCheck, ChevronRight } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Users, ClipboardList, Globe } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
 interface ControlPanelItemProps {
   name: string;
-
-  children: React.ReactNode;
+  href: string;
 }
 
-const ControlPanelItem = ({ name, children }: ControlPanelItemProps) => {
-  const itemRef = useRef<HTMLDivElement>(null);
-  const iconMapper: Record<string, React.ReactNode> = React.useMemo(
-    () => ({
-      clients: <Users />,
-      orders: <ListCheck />,
-    }),
-    []
-  );
-  const modals = useModalStore((store) => store.modals);
-  const toggle = useModalStore((store) => store.toggle);
-  const isOpen = !!modals[name];
+const sectionIcons: Record<string, React.ReactNode> = {
+  clients: <Users className="w-4 h-4" />,
+  orders: <ClipboardList className="w-4 h-4" />,
+  services: <Globe className="w-4 h-4" />,
+};
 
-  useCloseDiv({
-    ref: itemRef,
-    state: isOpen,
-    setState: () => toggle(name),
-  });
+const ControlPanelItem = ({ name, href }: ControlPanelItemProps) => {
+  const pathname = usePathname();
+  const isActive = pathname.includes(`/control-panel/${name}`);
 
   return (
-    <div
-      ref={itemRef}
-      className={`element capitalize flex gap-2 pb-2 rounded-lg ${
-        isOpen ? "relative" : ""
+    <Link
+      href={href}
+      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+        isActive
+          ? "text-(--color-accent) bg-(--color-accent)/10"
+          : "text-(--color-text-secondary) hover:text-(--color-text) hover:bg-(--color-bg-hover)"
       }`}
-      onClick={() => toggle(name)}
     >
-      <span>{iconMapper[name]}</span>
-      <span>{name}</span>
-      <ChevronRight className="ml-auto" />
-      <div
-        className={`absolute -right-full bg-(--color-bg) py-2 rounded-lg shadow transition-all duration-300 ${
-          isOpen ? "opacity-100 visible z-30" : "opacity-0 invisible z-0"
-        }`}
-      >
-        <div className="text-center">{name}</div>
-        {children}
-      </div>
-    </div>
+      <span className={isActive ? "text-(--color-accent)" : ""}>
+        {sectionIcons[name] ?? <span className="w-4 h-4 block" />}
+      </span>
+      <span className="capitalize">{name}</span>
+    </Link>
   );
 };
 

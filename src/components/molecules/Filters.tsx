@@ -11,15 +11,17 @@ interface FiltersProps {
 
 const Filters: FC<FiltersProps> = ({ filters, activeFilter, onSelect }) => {
   return (
-    <div className="flex justify-center gap-4 flex-wrap">
-      {filters.map((f) => (
-        <PortfolioFiltersButton
-          filter={f}
-          activeService={activeFilter}
-          onSelect={onSelect}
-          key={f.id}
-        />
-      ))}
+    <div className="flex justify-center mb-10">
+      <div className="inline-flex items-center gap-1 p-1.5 rounded-full bg-(--color-bg-section) border border-(--color-border)">
+        {filters.map((f) => (
+          <PortfolioFiltersButton
+            filter={f}
+            activeService={activeFilter}
+            onSelect={onSelect}
+            key={f.id}
+          />
+        ))}
+      </div>
     </div>
   );
 };

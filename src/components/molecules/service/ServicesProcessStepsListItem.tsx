@@ -5,20 +5,20 @@ import { FC } from "react";
 interface IServiceProcessStepItemProps {
   step: ServiceProcessStep;
 }
-const ServicesProcessStepsListItem: FC<IServiceProcessStepItemProps> = ({
-  step,
-}) => {
+
+const ServicesProcessStepsListItem: FC<IServiceProcessStepItemProps> = ({ step }) => {
   return (
-    <li className="mb-10 ml-6 pt-2 pr-2">
-      <div className="absolute w-3 h-3 rounded-full -left-1.5 mt-1.5 bg-(--color-accent)"></div>
-      <Title
-        as={"h3"}
-        className="text-xl font-semibold text-(--color-text) mb-2"
-      >
-        {step.step}. {step.title}
+    <div className="flex flex-col items-center text-center gap-4">
+      <div className="relative z-10 w-12 h-12 rounded-full bg-(--color-accent) text-white flex items-center justify-center text-lg font-bold shadow-[0_0_0_4px_var(--color-bg)]">
+        {step.step}
+      </div>
+      <Title as="h3" className="text-base font-semibold text-(--color-text)">
+        {step.title}
       </Title>
-      <p className={"text-(--color-text-secondary)"}>{step.description}</p>
-    </li>
+      <p className="text-sm text-(--color-text-secondary) leading-relaxed max-w-[160px]">
+        {step.description}
+      </p>
+    </div>
   );
 };
 

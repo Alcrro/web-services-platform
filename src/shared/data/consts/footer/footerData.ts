@@ -1,23 +1,37 @@
-import { FaSlack, FaInstagram, FaTeamspeak, FaDiscord } from "react-icons/fa";
+import { FaSlack, FaInstagram, FaDiscord } from "react-icons/fa";
 
 export const footerData: IFooterData[] = [
   {
     id: 0,
     title: "alcrro",
+    description: "Building websites, apps, and AI automations that scale.",
     children: [],
   },
   {
     id: 1,
-    title: "support",
-    children: [{ id: 0, name: "blabla", link: "dadwda" }],
+    title: "services",
+    children: [
+      { id: 0, name: "Web Development", link: "/services/web" },
+      { id: 1, name: "App Development", link: "/services/app" },
+      { id: 2, name: "AI & Automation", link: "/services/scripts" },
+      { id: 3, name: "SaaS Development", link: "/services/saas" },
+    ],
   },
   {
     id: 2,
+    title: "company",
+    children: [
+      { id: 0, name: "Portfolio", link: "/portfolio" },
+      { id: 1, name: "Contact", link: "/contact" },
+    ],
+  },
+  {
+    id: 3,
     title: "contact",
     children: [{ id: 0, name: "email", value: "alex.roventa94@gmail.com" }],
   },
   {
-    id: 3,
+    id: 4,
     title: "socials",
     children: [
       {
@@ -27,17 +41,11 @@ export const footerData: IFooterData[] = [
       },
       {
         id: 1,
-        name: "microsoft-teams",
-        link: "#",
-      },
-
-      {
-        id: 2,
         name: "discord",
         link: "https://discord.gg/cmHpexcz",
       },
       {
-        id: 3,
+        id: 2,
         name: "instagram",
         link: "https://instagram.com/_alcrro_",
       },
@@ -48,13 +56,13 @@ export const footerData: IFooterData[] = [
 export const iconsMap: Record<string, React.ElementType> = {
   slack: FaSlack,
   instagram: FaInstagram,
-  "microsoft-teams": FaTeamspeak,
   discord: FaDiscord,
 };
 
 export interface IFooterData {
   id: number;
   title: string;
+  description?: string;
   children: IFooterChildren[];
 }
 

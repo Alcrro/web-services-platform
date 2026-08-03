@@ -3,7 +3,7 @@ import Title from "../../../shared/ui/Title";
 const HomeHeroTitle = ({ title }: { title: string }) => {
   return (
     <Title
-      className={`${style.titleC} uppercase font-medium text-center text-[clamp(1rem,5vw,2rem)]`}
+      className={`${style.titleC} font-semibold text-center text-[clamp(1.5rem,5vw,2.75rem)] leading-tight`}
       id="hero-title"
     >
       {title}

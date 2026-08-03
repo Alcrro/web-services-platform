@@ -1,19 +1,21 @@
-import { Plus } from "lucide-react";
-import { ReactNode } from "react";
+import { Check } from "lucide-react";
 
 const Feature = ({
   feature,
-  children,
+  variant = "included",
 }: {
   feature: string;
-  children: ReactNode;
+  variant?: "included" | "addon";
 }) => {
   return (
-    <>
-      <Plus className="text-green-500 size-4" />
-      {children}
-      <span className="text-sm mt-1">{feature}</span>
-    </>
+    <div className="flex items-center gap-3 py-1.5">
+      {variant === "included" ? (
+        <Check className="text-green-500 size-4 shrink-0" />
+      ) : (
+        <span className="size-1.5 rounded-full bg-gray-500 shrink-0 ml-1.5" />
+      )}
+      <span className="text-sm text-(--color-text)">{feature}</span>
+    </div>
   );
 };
 

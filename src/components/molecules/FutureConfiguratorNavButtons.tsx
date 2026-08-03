@@ -59,7 +59,7 @@ const FutureConfiguratorNavButtons = ({
     id: service.id,
     clientId: "",
     projectName: "",
-    initialPrice: service.initialPrice,
+    initialPrice: service.pricingConfig?.displayPrice ?? 0,
     totalPrice: price.total,
     status: "NEW",
     createdAt: new Date(),

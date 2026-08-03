@@ -6,11 +6,12 @@ import { useModalStore } from "@/context/modalStore";
 import { IMetaPagination } from "@/modules/globals/types/types";
 import { useOrders } from "@/shared/hooks/useOrders";
 import { IServiceOrderTable } from "@/modules/services/domain/types/service.types";
+import OrdersFilterBar from "@/modules/orders/components/OrdersFilterBar";
 
 interface Props {
-  initialData: IServiceOrderTable[]; // date SSR pentru prima pagină
-  meta: IMetaPagination; // meta SSR
-  params: Record<string, string | string[]>; // { page, limit, ... }
+  initialData: IServiceOrderTable[];
+  meta: IMetaPagination;
+  params: Record<string, string | string[]>;
 }
 
 const DefaultTableClient = ({ initialData, meta, params }: Props) => {
@@ -31,23 +32,24 @@ const DefaultTableClient = ({ initialData, meta, params }: Props) => {
   );
 
   const showSkeleton = isLoading || isFetching || isPlaceholderData;
-  // Skeleton vizibil în timp ce datele noi se încarcă
-  if (showSkeleton) {
-    return (
-      <LoadingOrderTableColumnClient
-        initialData={initialData}
-        meta={tableMeta.totalPages ?? 1}
-        params={params}
-      />
-    );
-  }
 
   return (
-    <DefaultTable<IServiceOrderTable>
-      data={tableData}
-      columns={columns}
-      meta={tableMeta}
-    />
+    <div className="flex flex-col gap-4">
+      <OrdersFilterBar />
+      {showSkeleton ? (
+        <LoadingOrderTableColumnClient
+          initialData={initialData}
+          meta={tableMeta.totalPages ?? 1}
+          params={params}
+        />
+      ) : (
+        <DefaultTable<IServiceOrderTable>
+          data={tableData}
+          columns={columns}
+          meta={tableMeta}
+        />
+      )}
+    </div>
   );
 };
 

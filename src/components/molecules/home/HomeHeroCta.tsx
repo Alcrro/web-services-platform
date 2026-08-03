@@ -1,22 +1,26 @@
 import Button from "@/shared/ui/Button";
-import { homePageContent } from "@/shared/data/consts/homePage/homePageContent";
+import { IHomeHero } from "@/shared/data/consts/homePage/homePageContent";
 
-const HomeHeroCta = () => {
+interface HomeHeroCtaProps {
+  cta: IHomeHero["cta"];
+}
+
+const HomeHeroCta = ({ cta }: HomeHeroCtaProps) => {
   return (
     <>
       <Button
-        variant="primary"
-        href={homePageContent.hero.cta.primary.link}
-        className="w-full max-w-60 animate-scaleUp "
+        variant="neutral"
+        href={cta.primary.link}
+        className="w-full max-w-60 animate-scaleUp"
       >
-        {homePageContent.hero.cta.primary.text}
+        {cta.primary.text}
       </Button>
       <Button
-        variant="primary"
-        href={homePageContent.hero.cta.secondary.link}
-        className="w-full max-w-60 animate-scaleUp "
+        variant="ghost"
+        href={cta.secondary.link}
+        className="w-full max-w-60 animate-scaleUp"
       >
-        {homePageContent.hero.cta.secondary.text}
+        {cta.secondary.text}
       </Button>
     </>
   );

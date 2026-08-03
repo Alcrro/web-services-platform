@@ -1,12 +1,11 @@
-import style from "@/components/styles/footerTitle.module.scss";
-import Description from "@/shared/ui/Description";
+interface FooterTitleProps {
+  title: string;
+}
 
-const FooterTitle = ({ title }: { title: string }) => {
-  return (
-    <Description as={"p"} className={`${style.li}`}>
-      {title}
-    </Description>
-  );
-};
+const FooterTitle = ({ title }: FooterTitleProps) => (
+  <p className="text-sm font-semibold uppercase tracking-widest text-(--color-text-secondary) mb-4">
+    {title}
+  </p>
+);
 
 export default FooterTitle;

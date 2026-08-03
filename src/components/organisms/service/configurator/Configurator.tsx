@@ -18,7 +18,7 @@ const Configurator: React.FC<{ services?: IService }> = ({ services }) => {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <ConfigureFeaturesTitle name={services.name} />
-          <ConfigurationFeaturesBasePrice price={services.initialPrice} />
+          <ConfigurationFeaturesBasePrice price={services.pricingConfig?.displayPrice ?? null} />
         </div>
         <div className="space-y-3">
           <ServiceFeatureOptionContainer

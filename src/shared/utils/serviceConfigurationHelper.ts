@@ -8,7 +8,7 @@ export function calculatePrice(
   selectedOptions: Partial<IServiceFeature>[],
   quantity: number
 ) {
-  const base = service.initialPrice;
+  const base = service.pricingConfig?.displayPrice ?? 0;
 
   const optionsPrice = selectedOptions.reduce(
     (acc, o) => acc + o.unitPrice!,

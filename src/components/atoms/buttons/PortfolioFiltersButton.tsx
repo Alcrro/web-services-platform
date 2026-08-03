@@ -1,6 +1,5 @@
 "use client";
 import { FC } from "react";
-import Button from "../../../shared/ui/Button";
 import { PortfolioFilterItem } from "@/shared/data/consts/portfololioPage/portfolioPageContent";
 
 interface FiltersProps {
@@ -8,22 +7,21 @@ interface FiltersProps {
   activeService: string | null;
   onSelect: (key: string) => void;
 }
-const PortfolioFiltersButton: FC<FiltersProps> = ({
-  filter,
-  activeService,
-  onSelect,
-}) => {
+
+const PortfolioFiltersButton: FC<FiltersProps> = ({ filter, activeService, onSelect }) => {
+  const isActive = activeService === filter.key || (!activeService && filter.key === "all");
+
   return (
-    <Button
+    <button
       onClick={() => onSelect(filter.key)}
-      className={`px-4 py-2 rounded-lg font-medium transition ${
-        activeService === filter.key
-          ? "bg-(--color-accent) text-(--color-bg)"
-          : "bg-(--color-bg-section) text-(--color-text)"
+      className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer whitespace-nowrap ${
+        isActive
+          ? "bg-(--color-accent) text-white shadow-md"
+          : "text-(--color-text-secondary) hover:text-(--color-text)"
       }`}
     >
       {filter.name}
-    </Button>
+    </button>
   );
 };
 

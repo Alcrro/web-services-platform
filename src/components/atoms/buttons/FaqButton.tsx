@@ -1,5 +1,4 @@
-import Button from "../../../shared/ui/Button";
-import styles from "@/components/styles/FAQ.module.scss";
+import { ChevronDown } from "lucide-react";
 
 interface FaqButtonProps {
   question: string;
@@ -15,15 +14,19 @@ const FaqButton: React.FC<FaqButtonProps> = ({
   ariaControls,
 }) => {
   return (
-    <Button
-      className={styles.questionButton}
+    <button
       onClick={onClick}
       aria-expanded={isOpen}
       aria-controls={ariaControls}
+      className="flex w-full items-center justify-between py-5 text-left text-base font-medium text-(--color-text) transition-colors hover:text-gray-500 dark:hover:text-white/60 border-0 outline-none bg-transparent"
     >
-      <span className="text-md ">{question}</span>
-      <span className={styles.icon}>{isOpen ? "−" : "+"}</span>
-    </Button>
+      <span>{question}</span>
+      <ChevronDown
+        className={`ml-4 h-4 w-4 shrink-0 text-gray-400 dark:text-white/40 transition-transform duration-300 ${
+          isOpen ? "rotate-180" : ""
+        }`}
+      />
+    </button>
   );
 };
 

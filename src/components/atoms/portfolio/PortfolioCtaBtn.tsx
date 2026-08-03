@@ -1,14 +1,13 @@
-import Button from "@/shared/ui/Button";
+import Link from "next/link";
 
 const PortfolioCtaBtn = ({ href, text }: { href: string; text: string }) => {
   return (
-    <Button
+    <Link
       href={href}
-      variant="secondary"
-      className="cta-button w-fit mx-auto"
+      className="inline-flex items-center justify-center px-8 py-3 rounded-xl font-semibold text-base bg-white text-(--color-accent) hover:bg-white/90 transition-all shadow-lg hover:shadow-xl"
     >
       {text}
-    </Button>
+    </Link>
   );
 };
 

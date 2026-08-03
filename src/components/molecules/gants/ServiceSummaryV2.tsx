@@ -91,7 +91,7 @@ const ServiceSummaryV2 = ({ data, onSelectService }: IServiceOptionProps) => {
   }, []);
   return (
     <ReactECharts
-      className="w-full h-[600px]"
+      className="w-full h-150"
       ref={chartRef}
       option={option}
       onEvents={onEvents}

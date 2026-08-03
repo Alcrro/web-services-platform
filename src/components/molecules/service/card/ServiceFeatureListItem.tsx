@@ -1,15 +1,13 @@
-import { FC, ReactNode } from "react";
-import Features from "./Feature";
+import Feature from "./Feature";
 
-interface IServiceFeatureItemProps {
-  name: string;
-  icon: ReactNode;
-}
-const ServiceFeatureListItem: FC<IServiceFeatureItemProps> = ({
+const ServiceFeatureListItem = ({
   name,
-  icon,
+  variant = "included",
+}: {
+  name: string;
+  variant?: "included" | "addon";
 }) => {
-  return <Features feature={name ?? "Unknown  Feature"}>{icon}</Features>;
+  return <Feature feature={name ?? "Unknown Feature"} variant={variant} />;
 };
 
 export default ServiceFeatureListItem;

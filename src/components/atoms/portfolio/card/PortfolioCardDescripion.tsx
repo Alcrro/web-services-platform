@@ -4,7 +4,7 @@ const PortfolioCardDescription = ({ description }: { description: string }) => {
   return (
     <Description
       as="p"
-      className=" dark:text-gray-300 mb-4 max-h-16 h-full text-(--color-text-secondary) overflow-hidden"
+      className="text-(--color-text-secondary) mb-3 line-clamp-2"
     >
       {description}
     </Description>

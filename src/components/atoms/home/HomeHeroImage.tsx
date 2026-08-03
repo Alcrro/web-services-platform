@@ -10,7 +10,7 @@ const HomeHeroImage = ({
   return (
     <DefaultIcon
       src={src}
-      alt="Hero"
+      alt="Web development and automation services showcase — homepage hero"
       className={`h-full w-full object-cover object-[cover_65%] rounded-2xl opacity-60 lg:opacity-100 transition-opacity duration-700 ease-in-out ${className}`}
       width={1363} // dimensiune reală
       height={910} // păstrează aspect ratio

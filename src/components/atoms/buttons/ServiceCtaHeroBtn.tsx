@@ -1,18 +1,18 @@
-import Button from "@/shared/ui/Button";
+import Link from "next/link";
 import { FC } from "react";
 
 interface IServiceCtaHeroBtnProps {
   hero: { href: string; text: string };
 }
+
 const ServiceCtaHeroBtn: FC<IServiceCtaHeroBtnProps> = ({ hero }) => {
   return (
-    <Button
+    <Link
       href={hero.href}
-      variant="primary"
-      className="cta-button w-fit m-fit mx-auto"
+      className="inline-flex items-center gap-2 px-8 py-3.5 bg-(--color-accent) text-white text-base font-semibold rounded-xl hover:bg-(--color-accent-hover) transition-colors"
     >
       {hero.text}
-    </Button>
+    </Link>
   );
 };
 
