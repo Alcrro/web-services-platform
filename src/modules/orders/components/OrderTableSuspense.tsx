@@ -1,5 +1,5 @@
 import LoadingOrderTable from "@/modules/clients/components/LoadingOrderTable";
-import OrderTablePage from "./OrderTable";
+import OrdersTable from "./OrdersTable";
 import { Suspense } from "react";
 
 const OrderTableWithSuspense = ({
@@ -9,7 +9,7 @@ const OrderTableWithSuspense = ({
 }) => {
   return (
     <Suspense fallback={<LoadingOrderTable searchParams={searchParams} />}>
-      <OrderTablePage searchParams={searchParams} />
+      <OrdersTable searchParams={searchParams} />
     </Suspense>
   );
 };

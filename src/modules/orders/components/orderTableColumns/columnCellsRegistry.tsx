@@ -20,13 +20,11 @@ export const createColumnRegistry = <T extends { id?: string }>() => {
     projectName: () => ({ accessorKey: "projectName", header: "Project name" }),
     serviceName: () => ({
       accessorKey: "serviceName",
-      header: ({ column }) => <ServiceNameOrderTable<T> column={column} />,
+      header: () => <ServiceNameOrderTable />,
     }),
     status: () => ({
       accessorKey: "status",
-      header: ({ column }) => {
-        return <StatusHeaderColumn<T> column={column} />;
-      },
+      header: () => <StatusHeaderColumn />,
     }),
     initialPrice: () => ({
       accessorKey: "initialPrice",

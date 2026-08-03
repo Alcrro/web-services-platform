@@ -3,7 +3,6 @@
 import { useQuery } from "@tanstack/react-query";
 import type { IMetaPagination } from "@/modules/globals/types/types";
 import {
-  IFiltersServiceOrders,
   statusMapper,
   type IServiceOrder,
   type IServiceOrderStatus,
@@ -12,7 +11,7 @@ import { IServiceOrderTable } from "@/modules/services/domain/types/service.type
 import { fetchTableOrders } from "@/modules/orders/infrastructure/order.client";
 
 export function useOrders(
-  params: IFiltersServiceOrders,
+  params: Record<string, string | string[]>,
   initialData?: { data: IServiceOrderTable[]; meta: IMetaPagination }
 ) {
   return useQuery<{ data: IServiceOrderTable[]; meta: IMetaPagination }, Error>(

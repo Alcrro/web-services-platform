@@ -1,29 +1,27 @@
 "use client";
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import { useSortableColumn } from "../../../../shared/utils/handleSort";
 
 const CreatedAtHeaderColumn = () => {
   const { currentDirection, currentField, onClick } =
     useSortableColumn("createdAt");
+
+  const isActive = currentField === "createdAt";
+
   return (
-    <div
-      className="flex flex-col gap-1 justify-center items-center cursor-pointer"
+    <button
       onClick={onClick}
+      className="inline-flex items-center gap-1 text-xs font-semibold text-(--color-text-secondary) uppercase tracking-wider hover:text-(--color-text) transition-colors cursor-pointer"
     >
       Date
-      {currentField === "createdAt" && currentDirection === "asc" && (
-        <ArrowDown size={14} />
+      {isActive && currentDirection === "asc" && (
+        <ArrowUp size={12} className="text-(--color-accent)" />
       )}
-      {currentField === "createdAt" && currentDirection === "desc" && (
-        <ArrowUp size={14} />
+      {isActive && currentDirection === "desc" && (
+        <ArrowDown size={12} className="text-(--color-accent)" />
       )}
-      {!(currentField === "createdAt") && (
-        <div className="flex">
-          <ArrowUp size={14} className="opacity-30" />
-          <ArrowDown size={14} className="opacity-30" />
-        </div>
-      )}
-    </div>
+      {!isActive && <ArrowUpDown size={12} className="opacity-30" />}
+    </button>
   );
 };
 

@@ -3,6 +3,7 @@ import {
   IFilters,
   IOrderBy,
 } from "@/modules/globals/types/types";
+import { IOrdersQueryParams } from "@/modules/orders/domain/types/order.types";
 
 export function mapSearchParamsOptions<T>(
   params: Record<string, string | string[]>
@@ -55,5 +56,28 @@ export function mapSearchParamsOptions<T>(
     page,
     orderBy,
     filters,
+  };
+}
+
+const get = (params: Record<string, string | string[]>, key: string) => {
+  const v = params[key];
+  return Array.isArray(v) ? v[0] : v;
+};
+
+export function mapOrdersSearchParams(
+  params: Record<string, string | string[]>
+): IOrdersQueryParams {
+  const direction = get(params, "direction");
+  return {
+    page: get(params, "page") ? Number(get(params, "page")) : 1,
+    limit: get(params, "limit") ? Number(get(params, "limit")) : 10,
+    orderby: get(params, "orderby"),
+    direction:
+      direction === "asc" || direction === "desc" ? direction : undefined,
+    status: get(params, "status") || undefined,
+    service: get(params, "service") || undefined,
+    search: get(params, "search") || undefined,
+    dateFrom: get(params, "dateFrom") || undefined,
+    dateTo: get(params, "dateTo") || undefined,
   };
 }

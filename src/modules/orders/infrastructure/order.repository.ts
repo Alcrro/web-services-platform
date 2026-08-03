@@ -2,7 +2,9 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { OrderRepository } from "../domain/order.repository.interface";
 import {
   IFiltersServiceOrders,
+  IOrdersQueryParams,
   IServiceOrder,
+  statusOrderByMapperURLToBackend,
 } from "../domain/types/order.types";
 import {
   serviceOrderMapperDocToDom,
@@ -94,6 +96,53 @@ export class OrderRepositoryImplementation implements OrderRepository {
       throw error instanceof Error ? error : new Error("Internal db error");
     }
   }
+  async getAllWithParams(
+    params: IOrdersQueryParams
+  ): Promise<{ data: IServiceOrder[]; total: number }> {
+    try {
+      const page = params.page ?? 1;
+      const limit = params.limit ?? 10;
+      const skip = (page - 1) * limit;
+
+      const where: Prisma.ServiceOrderWhereInput = {
+        isDeleted: false,
+        ...(params.status && {
+          status: statusOrderByMapperURLToBackend[params.status],
+        }),
+        ...(params.service && { serviceUniqueId: params.service }),
+        ...(params.search && {
+          projectName: { contains: params.search, mode: "insensitive" },
+        }),
+        ...((params.dateFrom || params.dateTo) && {
+          createdAt: {
+            ...(params.dateFrom && { gte: new Date(params.dateFrom) }),
+            ...(params.dateTo && { lte: new Date(params.dateTo) }),
+          },
+        }),
+      };
+
+      const orderByPrisma: Prisma.ServiceOrderOrderByWithRelationInput =
+        params.orderby
+          ? { [params.orderby]: params.direction ?? "asc" }
+          : { createdAt: "desc" };
+
+      const [data, total] = await Promise.all([
+        this.db.serviceOrder.findMany({
+          where,
+          skip,
+          take: limit,
+          orderBy: orderByPrisma,
+          include: { client: true, service: true, items: true, tasks: true },
+        }),
+        this.db.serviceOrder.count({ where }),
+      ]);
+
+      return { data: data.map(serviceOrderMapperDocToDom), total };
+    } catch (error) {
+      throw error instanceof Error ? error : new Error("Internal db error");
+    }
+  }
+
   async findById(orderId: string): Promise<IServiceOrder> {
     try {
       const result = await this.db.serviceOrder.findUnique({

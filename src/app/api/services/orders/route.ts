@@ -1,54 +1,48 @@
 import { ClientRepositoryImpl } from "@/modules/clients/infrastructure/client.repository";
 import { CreateOrder } from "@/modules/orders/application/use-cases/createOrder.usecase";
-import { FindAllOrder } from "@/modules/orders/application/use-cases/findAllOrder.usecase";
+import { FindAllOrderWithParams } from "@/modules/orders/application/use-cases/findAllOrderWithParams.usecase";
 import { OrderRepositoryImplementation } from "@/modules/orders/infrastructure/order.repository";
 import { AppError } from "@/shared/utils/AppError";
 import { prisma } from "@/lib/prisma";
 import { clientMapPrismaError } from "@/shared/utils/mappingErrors/clientMapPrismaError";
 import { NextRequest, NextResponse } from "next/server";
 import { ServiceOrderItemImpl } from "@/modules/orders/infrastructure/ServiceOrderItem.repository";
-import { IServiceOrder } from "@/modules/orders/domain/types/order.types";
+import { IOrdersQueryParams } from "@/modules/orders/domain/types/order.types";
 import { TaskRepositoryImpl } from "@/modules/tasks/infrastructure/task.repository";
 import { GithubServices } from "@/modules/features/github/application/usecase/GithubServices";
 
 export async function GET(request: NextRequest) {
   try {
-    const query = request.nextUrl.searchParams;
+    const q = request.nextUrl.searchParams;
+    const direction = q.get("direction");
 
-    const page = Number(query.get("page") || 1);
-    const limit = Number(query.get("limit") || 10);
-    const field = query.get("field") as keyof IServiceOrder;
-    const direction = query.get("direction") as "asc" | "desc";
-    const filter = query.get("filter") as keyof IServiceOrder;
-    const value = query.get("value") as string | number | boolean;
+    const params: IOrdersQueryParams = {
+      page: Number(q.get("page") || 1),
+      limit: Number(q.get("limit") || 10),
+      orderby: q.get("orderby") ?? undefined,
+      direction:
+        direction === "asc" || direction === "desc" ? direction : undefined,
+      status: q.get("status") ?? undefined,
+      service: q.get("service") ?? undefined,
+      search: q.get("search") ?? undefined,
+      dateFrom: q.get("dateFrom") ?? undefined,
+      dateTo: q.get("dateTo") ?? undefined,
+    };
 
     const orderRepositoryImpl = new OrderRepositoryImplementation(prisma);
-    const order = new FindAllOrder(orderRepositoryImpl);
-
-    const result = await order.execute({
-      limit,
-      page,
-      orderBy: { field, direction },
-      filters: {
-        filter,
-        value,
-      },
-    });
+    const useCase = new FindAllOrderWithParams(orderRepositoryImpl);
+    const result = await useCase.execute(params);
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
-    console.log(error);
-
     if (error instanceof Error) {
       const appError =
         error instanceof AppError ? error : clientMapPrismaError(error);
-
       return NextResponse.json(
         { ok: false, message: appError.userMessage },
         { status: appError.status }
       );
     }
-
     return NextResponse.json("internal error");
   }
 }

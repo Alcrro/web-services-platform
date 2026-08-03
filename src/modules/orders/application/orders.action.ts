@@ -1,5 +1,6 @@
 import {
   IFiltersServiceOrders,
+  IOrdersQueryParams,
   IServiceOrder,
 } from "../domain/types/order.types";
 import { OrdersAPI } from "../infrastructure/order.api";
@@ -49,6 +50,17 @@ export class OrdersAction {
     const result = await this.ordersAPI.findAllOrders<
       IServiceOrder & { extraFeaturesTotalPrice: number }
     >(options);
+    const resultData = result.data.map(ordersTableMapper);
+    return { data: resultData, meta: result.meta };
+  }
+
+  async getAllTableOrdersWithParams(params: IOrdersQueryParams): Promise<{
+    data: IServiceOrderTable[];
+    meta: IMetaPagination;
+  }> {
+    const result = await this.ordersAPI.findAllOrdersWithParams<
+      IServiceOrder & { extraFeaturesTotalPrice: number }
+    >(params);
     const resultData = result.data.map(ordersTableMapper);
     return { data: resultData, meta: result.meta };
   }

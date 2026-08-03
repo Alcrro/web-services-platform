@@ -64,6 +64,18 @@ export const ServiceOrderItem = {
 
 export type IFiltersServiceOrders = IFilters<IServiceOrder>;
 
+export interface IOrdersQueryParams {
+  page?: number;
+  limit?: number;
+  orderby?: string;
+  direction?: "asc" | "desc";
+  status?: string;
+  service?: string;
+  search?: string;
+  dateFrom?: string;
+  dateTo?: string;
+}
+
 export const statusOrderByMapperURLToBackend: Record<
   string,
   IServiceOrderStatus
