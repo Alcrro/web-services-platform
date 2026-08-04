@@ -8,6 +8,7 @@ interface ServiceOrderStatisticsInteractiveV2Props {
 }
 
 const statusStyle: Record<IStatusMapperType, string> = {
+  "pending review": "text-purple-400 bg-purple-400/10 border border-purple-400/20",
   new: "text-blue-400 bg-blue-400/10 border border-blue-400/20",
   "in progress": "text-amber-400 bg-amber-400/10 border border-amber-400/20",
   "in discussion": "text-purple-400 bg-purple-400/10 border border-purple-400/20",

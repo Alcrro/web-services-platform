@@ -18,7 +18,7 @@ const AdminSidebarLogoutButton = () => {
   return (
     <button
       onClick={handleLogout}
-      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-(--color-text-secondary) hover:text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer"
+      className="w-full max-lg:w-auto flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-(--color-text-secondary) hover:text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer"
     >
       <LogOut className="w-4 h-4" />
       <span>Logout</span>
