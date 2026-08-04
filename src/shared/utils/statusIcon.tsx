@@ -5,9 +5,11 @@ import {
   MessageCircle,
   CheckCircle,
   Check,
+  Clock,
 } from "lucide-react";
 
 const statusIcons = {
+  "pending review": Clock,
   new: PlusCircle,
   "in progress": Loader,
   "in discussion": MessageCircle,

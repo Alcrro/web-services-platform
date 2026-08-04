@@ -14,6 +14,7 @@ model User {
   name          String
   email         String   @unique
   password      String
+  avatar        String?
   isVerified    Boolean @default(false)
   role          Role     @default(USER)
   createdAt     DateTime @default(now())
@@ -58,6 +59,7 @@ model Service {
   name            String       @unique
   slug            String
   description     String
+  techStack       String[]     @default([])
   isHighlight     Boolean      @default(false)
   isDeleted       Boolean  @default(false)
   createdAt       DateTime @default(now())
@@ -73,6 +75,7 @@ model Feature {
   id                Int            @id @default(autoincrement())
   uniqueId          String @unique
   name              String
+  description       String?        @default("")
   isDeleted         Boolean  @default(false)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @default(now()) @updatedAt
@@ -127,6 +130,7 @@ model ServiceOrder {
   items           ServiceOrderItem[]
   status          ServiceOrderStatus @default(NEW)
   tasks           Task[]             // task-uri de implementare
+  discussions     OrderDiscussion[]
 
   
   @@index([status])
@@ -136,6 +140,7 @@ model ServiceOrder {
 
 
 enum ServiceOrderStatus {
+  PENDING_REVIEW
   NEW
   IN_PROGRESS
   IN_DISCUSSION
@@ -160,7 +165,27 @@ model ServiceOrderItem {
 
   type          FeatureType  // "feature" | "extra" | "bugfix"
   tasks         Task[]             // subtasks pentru implementare
-  serviceOrder  ServiceOrder     @relation(fields: [orderId], references: [id])
+  serviceOrder  ServiceOrder       @relation(fields: [orderId], references: [id])
+  discussionId  String?
+  discussion    OrderDiscussion?   @relation(fields: [discussionId], references: [id])
+}
+
+enum DiscussionStatus {
+  DRAFT
+  CONFIRMED
+}
+
+model OrderDiscussion {
+  id           String            @id @default(uuid())
+  orderId      String
+  order        ServiceOrder      @relation(fields: [orderId], references: [id])
+  notes        String            @default("")
+  status       DiscussionStatus  @default(DRAFT)
+  aiResponse   Json?
+  summary      String?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  items        ServiceOrderItem[]
 }
 
 
@@ -179,6 +204,18 @@ model Task {
   githubUrl     String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime?      @updatedAt
+  comments      TaskComment[]
+}
+
+model TaskComment {
+  id        String   @id @default(uuid())
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id])
+  authorId  String   // Client.id
+  message   String
+  createdAt DateTime @default(now())
+
+  @@index([taskId])
 }
 
 enum TaskStatus {
