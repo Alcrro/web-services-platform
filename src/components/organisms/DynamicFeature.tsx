@@ -7,6 +7,9 @@ import ServiceOrderStatistics from "./ServiceOrderStatisticsV2";
 import ServicesAdminTable from "@/modules/services/components/admin/ServicesAdminTable";
 import ServiceAdminDetail from "@/modules/services/components/admin/ServiceAdminDetail";
 import ServicesStatistics from "@/modules/services/components/admin/ServicesStatistics";
+import OrderExtend from "@/components/organisms/order/OrderExtend";
+import OrderDiscussions from "@/components/organisms/order/discussions/OrderDiscussions";
+import AllOrderDiscussions from "@/components/organisms/order/discussions/AllOrderDiscussions";
 import { getDynamicComponent } from "@/shared/utils/getDynamicComponent";
 
 type AnyComponent = React.FC<Record<string, unknown>>;
@@ -19,6 +22,8 @@ const componentMap: ComponentMap = {
   orders: {
     view: OrderTableWithSuspense,
     id: ViewOrder as AnyComponent,
+    extend: { id: OrderExtend as AnyComponent },
+    discussions: { id: OrderDiscussions as AnyComponent, view: AllOrderDiscussions as AnyComponent },
     statistics: ServiceOrderStatistics,
   },
   services: {

@@ -1,4 +1,4 @@
-import { BarChart2, LayoutGrid, type LucideIcon } from "lucide-react";
+import { BarChart2, LayoutGrid, MessageSquare, type LucideIcon } from "lucide-react";
 
 interface TabConfig {
   label: string;
@@ -14,6 +14,7 @@ export const sectionTabsConfig: Record<string, TabConfig[]> = {
   orders: [
     { label: "Statistics", value: "statistics", icon: BarChart2 },
     { label: "View", value: "view", icon: LayoutGrid },
+    { label: "Discussions", value: "discussions", icon: MessageSquare },
   ],
   services: [
     { label: "Statistics", value: "statistics", icon: BarChart2 },

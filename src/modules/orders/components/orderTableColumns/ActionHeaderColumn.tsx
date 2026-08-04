@@ -1,8 +1,7 @@
 "use client";
 import Button from "@/shared/ui/Button";
-// import DownloadInvoicePdf from "@/components/organisms/invoice/DownloadInvoicePdf";
 import { AnimatedCell } from "@/components/ui/AnimatedText";
-import { Eye } from "lucide-react";
+import { ArrowUpRight, MessageSquare } from "lucide-react";
 import { FC } from "react";
 
 interface ActionHeaderProps {
@@ -10,10 +9,7 @@ interface ActionHeaderProps {
   isLoading: boolean | false;
 }
 
-export const ActionHeaderColumn: FC<ActionHeaderProps> = ({
-  id,
-  isLoading,
-}) => {
+export const ActionHeaderColumn: FC<ActionHeaderProps> = ({ id, isLoading }) => {
   return (
     <div
       className="flex items-center gap-2 justify-center"
@@ -21,19 +17,25 @@ export const ActionHeaderColumn: FC<ActionHeaderProps> = ({
     >
       <AnimatedCell isLoading={isLoading} placeholderWidth="4">
         <Button
-          href={`${process.env.NEXT_PUBLIC_API}/invoices/pdf/${id}`}
-          target="_blank"
+          href={`/administrator/control-panel/orders/discussions/id/${id}`}
+          title="Discussions"
         >
-          <Eye
-            size={18}
-            className={"text-gray-400 hover:text-(--color-text) cursor-pointer"}
+          <MessageSquare
+            size={16}
+            className="text-(--color-text-secondary) hover:text-(--color-text) cursor-pointer"
           />
         </Button>
       </AnimatedCell>
-
       <AnimatedCell isLoading={isLoading} placeholderWidth="4">
-        {/* <DownloadInvoicePdf id={id} /> */}
-        pdfD
+        <Button
+          href={`/administrator/control-panel/orders/extend/id/${id}`}
+          title="Extend order"
+        >
+          <ArrowUpRight
+            size={18}
+            className="text-(--color-text-secondary) hover:text-(--color-text) cursor-pointer"
+          />
+        </Button>
       </AnimatedCell>
     </div>
   );
