@@ -1,20 +1,20 @@
 import ClientSidebar from "../../../../../components/organisms/ClientSidebar";
 import ClientPaneLayout from "@/components/templates/controlPanel/ControlPanelLayout";
-import MyOrders from "../../components/MyOrders";
+import ClientSectionTabs from "@/components/organisms/ClientSectionTabs";
 import { getDynamicComponent } from "@/shared/utils/getDynamicComponent";
-import ActiveProjects from "../../components/activeProjects/ActiveProjects";
-import ProjectTasks from "../../components/tasks/ProjectTasks";
 import Dashboard from "../../components/dashboard/Dashboard";
+import WorkspaceProjectList from "../../components/workspace/WorkspaceProjectList";
+import WorkspaceProjectDetail from "../../components/workspace/WorkspaceProjectDetail";
 
 type AnyComponent = React.FC<Record<string, unknown>>;
 
 interface ComponentMapper {
   [key: string]: AnyComponent | ComponentMapper;
 }
+
 const clientControlPanelMapper: ComponentMapper = {
   dashboard: Dashboard,
-  services: { orders: MyOrders },
-  projects: { active: ActiveProjects, tasks: ProjectTasks },
+  workspace: { list: WorkspaceProjectList, detail: WorkspaceProjectDetail },
 };
 
 interface PageProps {
@@ -27,9 +27,11 @@ const page = async ({ searchParams, params }: PageProps) => {
   const searchPar = await searchParams;
 
   const paramsSlug = slug || [];
+  const section = paramsSlug[0];
+
   let taskId: string | undefined;
   if (paramsSlug.length >= 3 && paramsSlug[paramsSlug.length - 2] === "tasks") {
-    taskId = paramsSlug[paramsSlug.length - 1]; // last segment = task ID
+    taskId = paramsSlug[paramsSlug.length - 1];
   }
 
   const { component: DynamicComponent } = getDynamicComponent(
@@ -39,20 +41,23 @@ const page = async ({ searchParams, params }: PageProps) => {
 
   return (
     <ClientPaneLayout>
-      <div className="flex gap-2 max-[1000px]:flex-wrap">
+      <div className="flex gap-4 max-lg:flex-col lg:items-start">
         <ClientSidebar />
-        <div className="flex flex-col gap-2 content bg-(--color-bg-section) w-full rounded-xl p-2">
-          {!DynamicComponent ? (
-            <div className="flex justify-center items-center h-full">
-              Feature incoming...
-            </div>
-          ) : (
-            <DynamicComponent
-              {...(slug ? { params: slug } : {})}
-              {...(searchParams ? { searchParams: searchPar } : {})}
-              taskId={taskId}
-            />
-          )}
+        <div className="flex-1 min-w-0 max-lg:w-full">
+          <div className="w-full text-(--color-text) flex flex-col gap-4 py-4 px-2 bg-(--color-bg-section) rounded-xl">
+            <ClientSectionTabs section={section} />
+            {!DynamicComponent ? (
+              <div className="flex justify-center items-center h-32 text-(--color-text-secondary) text-sm">
+                Feature incoming...
+              </div>
+            ) : (
+              <DynamicComponent
+                {...(slug ? { params: slug } : {})}
+                {...(searchParams ? { searchParams: searchPar } : {})}
+                taskId={taskId}
+              />
+            )}
+          </div>
         </div>
       </div>
     </ClientPaneLayout>

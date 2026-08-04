@@ -7,6 +7,7 @@ export function authMapperDomToDoc(user: IUser): User {
     name: user.name,
     email: user.email,
     password: user.password,
+    avatar: null,
     role: user.role || "USER",
     createdAt: user.createdAt,
     updatedAt: user.updatedAt || new Date(),

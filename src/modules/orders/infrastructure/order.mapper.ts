@@ -48,6 +48,7 @@ export function ServiceOrderItemMapper(
     deletedAt: result.deletedAt || null,
     orderId: result.orderId,
     description: result.description ?? null,
+    discussionId: null,
   };
 }
 

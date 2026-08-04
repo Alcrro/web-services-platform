@@ -21,10 +21,9 @@ export async function fetchOrdersByClient() {
     }
     const orders = await response.json();
 
-    return orders;
+    return Array.isArray(orders) ? orders : [];
   } catch (error) {
     console.log(error);
-
-    throw new Error("internal error");
+    return [];
   }
 }

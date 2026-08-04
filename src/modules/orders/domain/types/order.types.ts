@@ -48,6 +48,7 @@ export interface IServiceOrderItem {
 }
 
 export type IServiceOrderStatus =
+  | "PENDING_REVIEW"
   | "NEW"
   | "IN_PROGRESS"
   | "IN_DISCUSSION"
@@ -80,6 +81,7 @@ export const statusOrderByMapperURLToBackend: Record<
   string,
   IServiceOrderStatus
 > = {
+  "pending-review": "PENDING_REVIEW",
   new: "NEW",
   "in-progress": "IN_PROGRESS",
   done: "DONE",
@@ -100,6 +102,7 @@ export const serviceNameMapperFrontToURL = {};
 export type IStatusMapperType =
   (typeof statusMapper)[keyof typeof statusMapper];
 export const statusMapper = {
+  PENDING_REVIEW: "pending review",
   NEW: "new",
   IN_PROGRESS: "in progress",
   IN_DISCUSSION: "in discussion",

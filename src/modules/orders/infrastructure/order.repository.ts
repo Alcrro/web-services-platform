@@ -4,6 +4,7 @@ import {
   IFiltersServiceOrders,
   IOrdersQueryParams,
   IServiceOrder,
+  IServiceOrderStatus,
   statusOrderByMapperURLToBackend,
 } from "../domain/types/order.types";
 import {
@@ -16,6 +17,14 @@ import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError,
 } from "@prisma/client/runtime/library";
+import type {
+  IWorkspaceProjectDetail,
+  IWorkspaceProjectListItem,
+} from "../domain/types/workspace.types";
+import {
+  mapWorkspaceDetail,
+  mapWorkspaceListItem,
+} from "./workspace.mapper";
 
 export class OrderRepositoryImplementation implements OrderRepository {
   constructor(private readonly db: PrismaClient) {}
@@ -156,9 +165,98 @@ export class OrderRepositoryImplementation implements OrderRepository {
       });
       if (!result) throw new Error("order isn't in db");
 
-      // console.log({ result });
-
       return serviceOrderMapperDocToDom(result);
+    } catch (error) {
+      throw error instanceof Error ? error : new Error("Internal db error");
+    }
+  }
+
+  async updateStatus(orderId: string, status: IServiceOrderStatus): Promise<void> {
+    try {
+      await this.db.serviceOrder.update({
+        where: { id: orderId },
+        data: { status: status as import("@prisma/client").ServiceOrderStatus },
+      });
+    } catch (error) {
+      throw error instanceof Error ? error : new Error("Internal db error");
+    }
+  }
+
+  async updatePricing(orderId: string, initialPrice: number, totalPrice: number): Promise<void> {
+    try {
+      await this.db.serviceOrder.update({
+        where: { id: orderId },
+        data: {
+          initialPrice: new Prisma.Decimal(initialPrice),
+          totalPrice: new Prisma.Decimal(totalPrice),
+        },
+      });
+    } catch (error) {
+      throw error instanceof Error ? error : new Error("Internal db error");
+    }
+  }
+
+  async getClientProjects(
+    clientId: string
+  ): Promise<IWorkspaceProjectListItem[]> {
+    try {
+      const orders = await this.db.serviceOrder.findMany({
+        where: { clientId, isDeleted: false },
+        orderBy: { createdAt: "desc" },
+        include: {
+          service: { select: { name: true } },
+          tasks: { select: { status: true } },
+          items: {
+            where: { isDeleted: false },
+            select: { tasks: { select: { status: true } } },
+          },
+        },
+      });
+      return orders.map(mapWorkspaceListItem);
+    } catch (error) {
+      throw error instanceof Error ? error : new Error("Internal db error");
+    }
+  }
+
+  async getClientProjectDetail(
+    clientId: string,
+    orderId: string
+  ): Promise<IWorkspaceProjectDetail | null> {
+    try {
+      const order = await this.db.serviceOrder.findFirst({
+        where: { id: orderId, clientId, isDeleted: false },
+        include: {
+          service: {
+            include: {
+              serviceFeatures: {
+                where: { isIncluded: true, isDeleted: false },
+                include: { feature: true },
+              },
+            },
+          },
+          items: {
+            where: { isDeleted: false },
+            include: {
+              tasks: {
+                include: {
+                  assignee: { select: { name: true } },
+                  comments: true,
+                },
+              },
+            },
+          },
+          tasks: {
+            where: { orderItemId: null },
+            include: {
+              assignee: { select: { name: true } },
+              comments: true,
+            },
+          },
+        },
+      });
+
+      if (!order) return null;
+      return mapWorkspaceDetail(order);
     } catch (error) {
       throw error instanceof Error ? error : new Error("Internal db error");
     }
