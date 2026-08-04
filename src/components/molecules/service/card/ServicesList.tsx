@@ -11,12 +11,12 @@ const ServicesList = ({ features = [] }: { features: IServiceFeature[] }) => {
 
       {extraFeatures.length > 0 && (
         <>
-          <div className="flex items-center gap-2 mt-4 mb-2">
-            <span className="h-px flex-1 bg-gray-700/50" />
-            <span className="text-xs text-gray-500 uppercase tracking-wider">
+          <div className="flex items-center gap-2 mt-5 mb-2">
+            <span className="h-px flex-1 bg-(--color-border)" />
+            <span className="text-[10px] font-semibold text-(--color-text-secondary) uppercase tracking-wider">
               Add-ons
             </span>
-            <span className="h-px flex-1 bg-gray-700/50" />
+            <span className="h-px flex-1 bg-(--color-border)" />
           </div>
           <div className="max-h-[160px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
             <ServiceFeaturesList features={extraFeatures} variant="addon" />

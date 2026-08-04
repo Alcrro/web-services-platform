@@ -27,6 +27,7 @@ export interface IService {
   name: string;
   slug: string;
   description: string;
+  techStack: string[];
   serviceFeatures: IServiceFeature[];
   pricingConfig?: IServicePricingConfig | null;
   isDeleted: boolean | false;
@@ -69,6 +70,7 @@ export interface IFeature {
   id: string;
   uniqueId: string;
   name: string;
+  description?: string;
   icon?: string;
   createdAt: Date;
   serviceFeatures?: IServiceFeature;

@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Check, Plus } from "lucide-react";
 
 const Feature = ({
   feature,
@@ -8,13 +8,25 @@ const Feature = ({
   variant?: "included" | "addon";
 }) => {
   return (
-    <div className="flex items-center gap-3 py-1.5">
+    <div className="flex items-start gap-2.5 py-1.5">
       {variant === "included" ? (
-        <Check className="text-green-500 size-4 shrink-0" />
+        <span className="mt-0.5 w-4 h-4 rounded-full bg-green-500/10 flex items-center justify-center shrink-0">
+          <Check className="w-2.5 h-2.5 text-green-500 stroke-[2.5]" />
+        </span>
       ) : (
-        <span className="size-1.5 rounded-full bg-gray-500 shrink-0 ml-1.5" />
+        <span className="mt-0.5 w-4 h-4 rounded-full bg-(--color-accent)/10 flex items-center justify-center shrink-0">
+          <Plus className="w-2.5 h-2.5 text-(--color-accent) stroke-[2.5]" />
+        </span>
       )}
-      <span className="text-sm text-(--color-text)">{feature}</span>
+      <span
+        className={`text-sm leading-snug ${
+          variant === "included"
+            ? "text-(--color-text)"
+            : "text-(--color-text-secondary)"
+        }`}
+      >
+        {feature}
+      </span>
     </div>
   );
 };

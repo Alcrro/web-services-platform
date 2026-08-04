@@ -91,6 +91,7 @@ export function serviceMapperDocToDom(
     slug: service.slug,
     description: service.description,
     isHighlight: service.isHighlight ?? false,
+    techStack: service.techStack ?? [],
     pricingConfig: service.pricingConfig
       ? pricingConfigDocToDom(service.pricingConfig)
       : null,
@@ -110,6 +111,7 @@ export function serviceMapperDomToDoc(service: IService): Service {
     slug: service.slug,
     description: service.description,
     isHighlight: service.isHighlight ?? false,
+    techStack: [],
   };
 }
 
@@ -131,6 +133,7 @@ export function featureMapperDomToDoc(feature: IFeature): Feature {
   return {
     id: Number(feature.id),
     name: feature.name,
+    description: feature.description ?? "",
     uniqueId: feature.uniqueId,
     isDeleted: feature.isDeleted ?? false,
     createdAt: feature.createdAt ?? new Date(),
@@ -142,6 +145,7 @@ export function featureMapperDocToDom(feature: Feature): IFeature {
   return {
     id: feature.id.toString(),
     name: feature.name,
+    description: feature.description ?? "",
     uniqueId: feature.uniqueId,
     isDeleted: feature.isDeleted ?? false,
     createdAt: feature.createdAt ?? new Date(),
@@ -172,6 +176,7 @@ export function serviceOrderItemMapperDomToDoc(
     createdAt: item.createdAt,
     updatedAt: item.updatedAt ?? new Date(),
     deletedAt: item.deletedAt ?? null,
+    discussionId: null,
   };
 }
 export function serviceOrderItemPartialMapperDomToDoc(

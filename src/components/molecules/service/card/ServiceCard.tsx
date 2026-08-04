@@ -1,15 +1,15 @@
 import Link from "next/link";
 import { ReactNode } from "react";
-import style from "@/components/styles/serviceCard.module.scss";
 import ServiceChoseButton from "../../../atoms/buttons/ServiceChoseButton";
 import { priceDisplay } from "@/shared/utils/formatServicesPrice";
 import { IService, IPriceDisplayModel } from "@/modules/services/domain/types/service.types";
 import Boundary from "@/components/internalDev/Boundary";
+import { Star } from "lucide-react";
 
 const displayModelLabel: Record<IPriceDisplayModel, string> = {
   ONE_TIME: "One-time",
   SUBSCRIPTION: "Subscription",
-  CONTACT: "Contact",
+  CONTACT: "Contact us",
 };
 
 type ServiceCardProps = {
@@ -24,23 +24,40 @@ const ServiceCard = ({ service, children, href }: ServiceCardProps) => {
     service.pricingConfig?.displayPrice ?? null,
     service.uniqueId
   );
+  const isHighlight = service.isHighlight;
 
-  const CardContent = (
-    <div className="flex flex-col h-full p-5 max-[320px]:p-3">
-      <span className="inline-block self-start text-xs font-medium px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-3">
-        {displayModelLabel[model]}
-      </span>
+  const inner = (
+    <div className="flex flex-col h-full p-6">
+      <div className="flex items-center justify-between mb-5">
+        <span
+          className={`text-[11px] font-semibold px-2.5 py-1 rounded-full border ${
+            isHighlight
+              ? "bg-(--color-accent)/10 text-(--color-accent) border-(--color-accent)/20"
+              : "bg-(--color-bg-hover) text-(--color-text-secondary) border-(--color-border)"
+          }`}
+        >
+          {displayModelLabel[model]}
+        </span>
+        {isHighlight && (
+          <span className="flex items-center gap-1 text-[11px] font-semibold text-(--color-accent)">
+            <Star className="w-3 h-3 fill-(--color-accent)" />
+            Popular
+          </span>
+        )}
+      </div>
 
-      <h3 className="text-lg font-bold text-(--color-text) mb-1">
+      <h3 className="text-xl font-bold text-(--color-text) leading-tight mb-1.5">
         {service.name}
       </h3>
-      <p className="text-sm text-gray-400 mb-4 line-clamp-2">
+      <p className="text-sm text-(--color-text-secondary) line-clamp-2 mb-5">
         {service.description}
       </p>
 
-      <p className="text-2xl font-bold text-(--color-text) mb-4">{price}</p>
+      <p className="text-3xl font-extrabold text-(--color-text) tracking-tight mb-5">
+        {price}
+      </p>
 
-      <div className="h-px bg-gray-700/50 mb-4" />
+      <div className="h-px bg-(--color-border) mb-4" />
 
       <div className="flex-1 min-h-0">{children}</div>
     </div>
@@ -48,21 +65,23 @@ const ServiceCard = ({ service, children, href }: ServiceCardProps) => {
 
   return (
     <article
-      className={`${style.service_card} flex flex-col rounded-2xl border shadow-lg transition-all duration-300 h-full ${
-        service.isHighlight
-          ? "border-blue-500/60 shadow-blue-500/10 shadow-xl ring-1 ring-blue-500/20"
-          : "border-gray-700/50 hover:border-gray-600/70 hover:shadow-xl"
+      className={`flex flex-col rounded-2xl border transition-all duration-300 h-full max-h-[800px] bg-(--color-bg-section) ${
+        isHighlight
+          ? "border-(--color-accent)/40 shadow-lg ring-1 ring-(--color-accent)/20"
+          : "border-(--color-border) hover:shadow-md"
       }`}
     >
-      {href ? (
-        <Link href={`/services/${service.slug}`} className="flex flex-col flex-1">
-          {CardContent}
-        </Link>
-      ) : (
-        CardContent
-      )}
+      <div className="flex-1 min-h-0">
+        {href ? (
+          <Link href={`/services/${service.slug}`} className="flex flex-col h-full">
+            {inner}
+          </Link>
+        ) : (
+          inner
+        )}
+      </div>
 
-      <div className="px-5 pb-5 pt-2">
+      <div className="px-6 pb-6 pt-2">
         <Boundary hydration="client">
           <ServiceChoseButton slug={service.slug} />
         </Boundary>
