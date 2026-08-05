@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Auth (Login / Sign-up)",
+    "status": "done"
+  },
+  {
+    "name": "Public — Home",
+    "status": "in-progress"
+  },
+  {
+    "name": "Public — About",
+    "status": "done"
+  },
+  {
+    "name": "Public — Contact",
+    "status": "done"
+  },
+  {
+    "name": "Public — Portfolio",
+    "status": "done"
+  },
+  {
+    "name": "Services (Listing)",
+    "status": "done"
+  },
+  {
+    "name": "Service Detail Page",
+    "status": "done"
+  },
+{
+    "name": "Service Inquiries",
+    "status": "done"
+  },
+  {
+    "name": "Admin Panel",
+    "status": "done"
+  },
+  {
+    "name": "Orders",
+    "status": "in-progress"
+  },
+  {
+    "name": "Order Discussions",
+    "status": "done"
+  },
+  {
+    "name": "Client Dashboard",
+    "status": "done"
+  },
+  {
+    "name": "Client Workspace (My Projects)",
+    "status": "in-progress"
+  },
+  {
+    "name": "Tasks",
+    "status": "in-progress"
+  },
+  {
+    "name": "Notifications",
+    "status": "in-progress"
+  },
+  {
+    "name": "Invoices",
+    "status": "not-started"
+  },
+  {
+    "name": "Payments",
+    "status": "not-started"
+  },
+  {
+    "name": "GitHub Integration",
+    "status": "not-started"
+  }
+]
