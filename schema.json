@@ -1,0 +1,392 @@
+{
+  "nodes": [
+    {
+      "id": "user",
+      "table": "User",
+      "color": "#f0883e",
+      "x": 0,
+      "y": 0,
+      "fields": [
+        { "name": "id", "type": "Int (PK, autoincrement)" },
+        { "name": "name", "type": "String" },
+        { "name": "email", "type": "String (unique)" },
+        { "name": "password", "type": "String" },
+        { "name": "avatar", "type": "String?" },
+        { "name": "isVerified", "type": "Boolean" },
+        { "name": "role", "type": "ADMIN | USER | DEVELOPER" },
+        { "name": "createdAt", "type": "DateTime" },
+        { "name": "updatedAt", "type": "DateTime?" },
+        { "name": "clientId", "type": "String?" }
+      ],
+      "detail": "Platform users. role controls access: ADMIN manages everything, USER is a client, DEVELOPER is assigned tasks."
+    },
+    {
+      "id": "session",
+      "table": "Session",
+      "color": "#3fb950",
+      "x": 400,
+      "y": 0,
+      "fields": [
+        { "name": "id", "type": "Int (PK, autoincrement)" },
+        { "name": "userId", "type": "→ User", "isRef": true },
+        { "name": "refreshToken", "type": "String (unique)" },
+        { "name": "userAgent", "type": "String?" },
+        { "name": "ipAddress", "type": "String?" },
+        { "name": "createdAt", "type": "DateTime" },
+        { "name": "expiresAt", "type": "DateTime" }
+      ],
+      "detail": "JWT refresh token sessions. Tracks browser/IP for security audits. Expires at expiresAt."
+    },
+    {
+      "id": "uiNotification",
+      "table": "ui_notifications",
+      "color": "#94a3b8",
+      "x": 800,
+      "y": 0,
+      "fields": [
+        { "name": "id", "type": "String (uuid, PK)" },
+        { "name": "type", "type": "String" },
+        { "name": "title", "type": "String" },
+        { "name": "message", "type": "String" },
+        { "name": "payload", "type": "Json" },
+        { "name": "read", "type": "Boolean" },
+        { "name": "createdAt", "type": "DateTime" }
+      ],
+      "detail": "In-app notifications. No user FK — filtering is done application-side via type/payload. Stored in ui_notifications table."
+    },
+    {
+      "id": "client",
+      "table": "Client",
+      "color": "#38bdf8",
+      "x": 0,
+      "y": 360,
+      "fields": [
+        { "name": "id", "type": "String (uuid, PK)" },
+        { "name": "name", "type": "String" },
+        { "name": "email", "type": "String (unique)" },
+        { "name": "phone", "type": "String?" },
+        { "name": "isDeleted", "type": "Boolean" },
+        { "name": "createdAt", "type": "DateTime" },
+        { "name": "updatedAt", "type": "DateTime" },
+        { "name": "deletedAt", "type": "DateTime?" }
+      ],
+      "detail": "Business clients who place service orders. Soft-deleted via isDeleted + deletedAt."
+    },
+    {
+      "id": "service",
+      "table": "Service",
+      "color": "#bc8cff",
+      "x": 400,
+      "y": 360,
+      "fields": [
+        { "name": "id", "type": "Int (PK, autoincrement)" },
+        { "name": "uniqueId", "type": "String (unique)" },
+        { "name": "name", "type": "String (unique)" },
+        { "name": "slug", "type": "String" },
+        { "name": "description", "type": "String" },
+        { "name": "techStack", "type": "String[]" },
+        { "name": "isHighlight", "type": "Boolean" },
+        { "name": "isDeleted", "type": "Boolean" },
+        { "name": "createdAt", "type": "DateTime" },
+        { "name": "updatedAt", "type": "DateTime" },
+        { "name": "deletedAt", "type": "DateTime?" }
+      ],
+      "detail": "Offered services (e.g. landing page, e-commerce). Each has features, a pricing config, and can be ordered by clients."
+    },
+    {
+      "id": "feature",
+      "table": "Feature",
+      "color": "#22d3ee",
+      "x": 800,
+      "y": 360,
+      "fields": [
+        { "name": "id", "type": "Int (PK, autoincrement)" },
+        { "name": "uniqueId", "type": "String (unique)" },
+        { "name": "name", "type": "String" },
+        { "name": "description", "type": "String?" },
+        { "name": "isDeleted", "type": "Boolean" },
+        { "name": "createdAt", "type": "DateTime" },
+        { "name": "updatedAt", "type": "DateTime" },
+        { "name": "deletedAt", "type": "DateTime?" }
+      ],
+      "detail": "Reusable feature definitions (e.g. 'Responsive Design', 'SEO optimization'). Linked to services via ServiceFeature."
+    },
+    {
+      "id": "serviceOrder",
+      "table": "ServiceOrder",
+      "color": "#f87171",
+      "x": 0,
+      "y": 720,
+      "fields": [
+        { "name": "id", "type": "String (uuid, PK)" },
+        { "name": "orderNo", "type": "Int (unique, autoincrement)" },
+        { "name": "projectName", "type": "String?" },
+        { "name": "serviceId", "type": "→ Service", "isRef": true },
+        { "name": "clientId", "type": "→ Client", "isRef": true },
+        { "name": "initialPrice", "type": "Decimal" },
+        { "name": "totalPrice", "type": "Decimal" },
+        { "name": "requirements", "type": "String?" },
+        { "name": "status", "type": "PENDING_REVIEW | NEW | IN_PROGRESS | IN_DISCUSSION | APPROVED | DONE" },
+        { "name": "isDeleted", "type": "Boolean" },
+        { "name": "createdAt", "type": "DateTime" },
+        { "name": "updatedAt", "type": "DateTime" },
+        { "name": "deletedAt", "type": "DateTime?" }
+      ],
+      "detail": "Core order entity. totalPrice is always computed server-side, never accepted from client. status drives the lifecycle from PENDING_REVIEW through DONE."
+    },
+    {
+      "id": "serviceFeature",
+      "table": "ServiceFeature",
+      "color": "#fbbf24",
+      "x": 600,
+      "y": 720,
+      "fields": [
+        { "name": "id", "type": "Int (PK, autoincrement)" },
+        { "name": "uniqueId", "type": "String (unique)" },
+        { "name": "serviceId", "type": "→ Service", "isRef": true },
+        { "name": "featureId", "type": "→ Feature", "isRef": true },
+        { "name": "type", "type": "STANDARD | OPTIONAL | OTHER" },
+        { "name": "isIncluded", "type": "Boolean" },
+        { "name": "hours", "type": "Int" },
+        { "name": "unitPrice", "type": "Decimal?" },
+        { "name": "quantity", "type": "Int?" },
+        { "name": "isDeleted", "type": "Boolean" },
+        { "name": "createdAt", "type": "DateTime" },
+        { "name": "updatedAt", "type": "DateTime" },
+        { "name": "deletedAt", "type": "DateTime?" }
+      ],
+      "detail": "Join table between Service and Feature. Stores pricing details per combination. Unique constraint on (serviceId, featureId)."
+    },
+    {
+      "id": "servicePricingConfig",
+      "table": "ServicePricingConfig",
+      "color": "#e879f9",
+      "x": 1000,
+      "y": 720,
+      "fields": [
+        { "name": "id", "type": "Int (PK, autoincrement)" },
+        { "name": "serviceId", "type": "→ Service (unique)", "isRef": true },
+        { "name": "hourlyRate", "type": "Decimal" },
+        { "name": "markupRate", "type": "Decimal" },
+        { "name": "fixedCosts", "type": "Decimal" },
+        { "name": "taxRate", "type": "Decimal" },
+        { "name": "displayPrice", "type": "Decimal?" },
+        { "name": "displayModel", "type": "ONE_TIME | SUBSCRIPTION | CONTACT" },
+        { "name": "currency", "type": "String" },
+        { "name": "createdAt", "type": "DateTime" },
+        { "name": "updatedAt", "type": "DateTime" }
+      ],
+      "detail": "One-to-one pricing config per service. hourlyRate + markupRate compute totalPrice server-side. displayModel controls how price is shown to clients."
+    },
+    {
+      "id": "serviceOrderItem",
+      "table": "ServiceOrderItem",
+      "color": "#a78bfa",
+      "x": 0,
+      "y": 1080,
+      "fields": [
+        { "name": "id", "type": "String (uuid, PK)" },
+        { "name": "orderId", "type": "→ ServiceOrder", "isRef": true },
+        { "name": "name", "type": "String" },
+        { "name": "description", "type": "String?" },
+        { "name": "quantity", "type": "Int" },
+        { "name": "unitPrice", "type": "Decimal?" },
+        { "name": "totalPrice", "type": "Decimal?" },
+        { "name": "showPrice", "type": "Boolean" },
+        { "name": "metadata", "type": "Json?" },
+        { "name": "type", "type": "STANDARD | OPTIONAL | OTHER" },
+        { "name": "discussionId", "type": "→ OrderDiscussion?", "isRef": true },
+        { "name": "isDeleted", "type": "Boolean" },
+        { "name": "createdAt", "type": "DateTime" },
+        { "name": "updatedAt", "type": "DateTime" },
+        { "name": "deletedAt", "type": "DateTime?" }
+      ],
+      "detail": "Line items within an order. showPrice controls client-facing visibility. Prices stored internally; totalPrice never accepted from client."
+    },
+    {
+      "id": "orderDiscussion",
+      "table": "OrderDiscussion",
+      "color": "#34d399",
+      "x": 400,
+      "y": 1080,
+      "fields": [
+        { "name": "id", "type": "String (uuid, PK)" },
+        { "name": "orderId", "type": "→ ServiceOrder", "isRef": true },
+        { "name": "notes", "type": "String" },
+        { "name": "status", "type": "DRAFT | CONFIRMED" },
+        { "name": "aiResponse", "type": "Json?" },
+        { "name": "summary", "type": "String?" },
+        { "name": "createdAt", "type": "DateTime" },
+        { "name": "updatedAt", "type": "DateTime" }
+      ],
+      "detail": "Discussion journal per order. AI suggestions stored in aiResponse. When CONFIRMED, linked items are locked and the order moves forward."
+    },
+    {
+      "id": "task",
+      "table": "Task",
+      "color": "#60a5fa",
+      "x": 800,
+      "y": 1080,
+      "fields": [
+        { "name": "id", "type": "String (uuid, PK)" },
+        { "name": "title", "type": "String" },
+        { "name": "status", "type": "NOT_STARTED | IN_PROGRESS | DONE | TESTED" },
+        { "name": "orderItemId", "type": "→ ServiceOrderItem?", "isRef": true },
+        { "name": "orderId", "type": "→ ServiceOrder?", "isRef": true },
+        { "name": "assigneeId", "type": "→ User?", "isRef": true },
+        { "name": "githubIssueId", "type": "Int?" },
+        { "name": "githubUrl", "type": "String?" },
+        { "name": "createdAt", "type": "DateTime" },
+        { "name": "updatedAt", "type": "DateTime?" }
+      ],
+      "detail": "Implementation tasks linked to an order or order item. Synced with GitHub Issues via githubIssueId/githubUrl. Assigned to a DEVELOPER user."
+    },
+    {
+      "id": "taskComment",
+      "table": "TaskComment",
+      "color": "#fb923c",
+      "x": 1100,
+      "y": 1080,
+      "fields": [
+        { "name": "id", "type": "String (uuid, PK)" },
+        { "name": "taskId", "type": "→ Task", "isRef": true },
+        { "name": "authorId", "type": "String (Client.id, no FK)" },
+        { "name": "message", "type": "String" },
+        { "name": "createdAt", "type": "DateTime" }
+      ],
+      "detail": "Comments on tasks. authorId stores Client.id but has no DB-level FK constraint. Indexed on taskId for fast lookup."
+    }
+  ],
+  "edges": [
+    {
+      "id": "session_user",
+      "source": "session",
+      "sourceHandle": "l",
+      "target": "user",
+      "targetHandle": "r",
+      "label": "userId",
+      "animated": true,
+      "color": "#3fb950"
+    },
+    {
+      "id": "serviceOrder_client",
+      "source": "serviceOrder",
+      "sourceHandle": "t",
+      "target": "client",
+      "targetHandle": "b",
+      "label": "clientId",
+      "animated": true,
+      "color": "#38bdf8"
+    },
+    {
+      "id": "serviceOrder_service",
+      "source": "serviceOrder",
+      "sourceHandle": "r",
+      "target": "service",
+      "targetHandle": "b",
+      "label": "serviceId",
+      "animated": true,
+      "color": "#bc8cff"
+    },
+    {
+      "id": "serviceFeature_service",
+      "source": "serviceFeature",
+      "sourceHandle": "t",
+      "target": "service",
+      "targetHandle": "b",
+      "label": "serviceId",
+      "animated": true,
+      "color": "#fbbf24"
+    },
+    {
+      "id": "serviceFeature_feature",
+      "source": "serviceFeature",
+      "sourceHandle": "r",
+      "target": "feature",
+      "targetHandle": "b",
+      "label": "featureId",
+      "animated": true,
+      "color": "#22d3ee"
+    },
+    {
+      "id": "pricingConfig_service",
+      "source": "servicePricingConfig",
+      "sourceHandle": "t",
+      "target": "service",
+      "targetHandle": "r",
+      "label": "serviceId",
+      "animated": true,
+      "color": "#e879f9"
+    },
+    {
+      "id": "serviceOrderItem_order",
+      "source": "serviceOrderItem",
+      "sourceHandle": "t",
+      "target": "serviceOrder",
+      "targetHandle": "b",
+      "label": "orderId",
+      "animated": true,
+      "color": "#a78bfa"
+    },
+    {
+      "id": "serviceOrderItem_discussion",
+      "source": "serviceOrderItem",
+      "sourceHandle": "r",
+      "target": "orderDiscussion",
+      "targetHandle": "l",
+      "label": "discussionId",
+      "animated": true,
+      "color": "#34d399"
+    },
+    {
+      "id": "orderDiscussion_order",
+      "source": "orderDiscussion",
+      "sourceHandle": "t",
+      "target": "serviceOrder",
+      "targetHandle": "b",
+      "label": "orderId",
+      "animated": true,
+      "color": "#34d399"
+    },
+    {
+      "id": "task_orderItem",
+      "source": "task",
+      "sourceHandle": "l",
+      "target": "serviceOrderItem",
+      "targetHandle": "r",
+      "label": "orderItemId",
+      "animated": true,
+      "color": "#60a5fa"
+    },
+    {
+      "id": "task_order",
+      "source": "task",
+      "sourceHandle": "t",
+      "target": "serviceOrder",
+      "targetHandle": "b",
+      "label": "orderId",
+      "animated": true,
+      "color": "#60a5fa"
+    },
+    {
+      "id": "task_user",
+      "source": "task",
+      "sourceHandle": "t",
+      "target": "user",
+      "targetHandle": "b",
+      "label": "assigneeId",
+      "animated": true,
+      "color": "#f0883e"
+    },
+    {
+      "id": "taskComment_task",
+      "source": "taskComment",
+      "sourceHandle": "l",
+      "target": "task",
+      "targetHandle": "r",
+      "label": "taskId",
+      "animated": true,
+      "color": "#fb923c"
+    }
+  ]
+}
