@@ -4,6 +4,7 @@ import "./globals.css";
 import ThemeProvider from "@/context/ThemeProvider";
 import ReactQueryProvider from "../shared/hooks/ReactQueryProvider";
 import { ToastContainer } from "react-toastify";
+import { headers } from "next/headers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,16 +22,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const nonce = (await headers()).get("x-nonce") ?? "";
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         {/* Blocking script — runs before paint, prevents dark mode flash */}
         <script
+          nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem('theme');document.documentElement.classList.toggle('dark',t!=='light')}catch(e){document.documentElement.classList.add('dark')}})()`,
           }}

@@ -19,31 +19,26 @@ export async function proxy(req: NextRequest) {
     tokenValid = validation.status === "valid";
   }
   try {
-    let response: NextResponse;
-
-    //? Redirect authenticated users await from /auth
-    if (firstPathname === "auth" && !tokenValid) {
-      url.pathname = "/client/control-panel";
-      response = NextResponse.redirect(url);
-    }
-
-    //? Protected routes: refreshToken if missing/expired
-    if (protectedRoutes.includes(firstPathname) && !accessToken) {
-      console.log("protect: ");
-
-      return await refreshAccess(req); //? refreshAccess must return NextResponse
-    } else {
-      response = NextResponse.next();
-    }
-
-    // generează CSP + nonce
     const { nonce, cspHeader } = generateCSP();
 
-    // poți păstra nonce în header dacă vrei să-l folosești în front-end
-    response.headers.set(
-      "Content-Security-Policy",
-      `script-src 'self' 'nonce-${nonce}'`
-    );
+    // Forward nonce on request so Next.js injects it into its own SSR scripts
+    const requestHeaders = new Headers(req.headers);
+    requestHeaders.set("x-nonce", nonce);
+
+    let response: NextResponse;
+
+    //? Redirect authenticated users away from /auth
+    if (firstPathname === "auth" && tokenValid) {
+      url.pathname = "/client/control-panel";
+      response = NextResponse.redirect(url);
+    } else if (protectedRoutes.includes(firstPathname) && !accessToken) {
+      return await refreshAccess(req);
+    } else {
+      response = NextResponse.next({
+        request: { headers: requestHeaders },
+      });
+    }
+
     response.headers.set("x-nonce", nonce);
     return applyCSP(response, cspHeader);
   } catch (error) {
