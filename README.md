@@ -1,40 +1,124 @@
-<<<<<<< HEAD
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ServicesDev — B2B Web Services Platform
+
+Full-stack platform for managing web service orders end-to-end: from public service discovery and client inquiries through order tracking, task management, AI-assisted discussions, and invoicing.
+
+**Live:** [web-services-test.vercel.app](https://web-services-test.vercel.app)
+
+![Preview](./preview.png)
+
+---
+
+## Tech Stack
+
+| Layer | Technologies |
+|---|---|
+| **Frontend** | Next.js 16, React 19, TypeScript, Tailwind CSS v4, Sass |
+| **State** | TanStack Query v5, Zustand |
+| **Backend** | Next.js API Routes, Zod v4, JWT, bcrypt |
+| **Database** | PostgreSQL, Prisma ORM |
+| **UI** | Radix UI, Lucide React, Tiptap, ECharts, TanStack Table |
+| **Integrations** | Anthropic SDK, Octokit (GitHub), next-themes |
+| **Infra** | AWS Amplify, Vitest |
+
+---
+
+## Features
+
+| Feature | Status |
+|---|---|
+| Auth (Login / Sign-up) | ✅ Done |
+| Public — About | ✅ Done |
+| Public — Contact | ✅ Done |
+| Public — Portfolio | ✅ Done |
+| Services (Listing) | ✅ Done |
+| Service Detail Page | ✅ Done |
+| Service Inquiries | ✅ Done |
+| Admin Panel | ✅ Done |
+| Order Discussions | ✅ Done |
+| Client Dashboard | ✅ Done |
+| Public — Home | 🔄 In Progress |
+| Orders | 🔄 In Progress |
+| Client Workspace (My Projects) | 🔄 In Progress |
+| Tasks | 🔄 In Progress |
+| Notifications | 🔄 In Progress |
+| Invoices | ⬜ Not Started |
+| Payments | ⬜ Not Started |
+| GitHub Integration | ⬜ Not Started |
+
+---
+
+## Architecture
+
+```
+src/
+├── app/
+│   ├── (pages)/          # Public marketing pages
+│   ├── (auth)/           # Login / sign-up
+│   ├── (client)/         # Protected client dashboard
+│   └── (administrator)/  # Protected admin area
+│
+├── modules/              # Domain-driven modules
+│   └── [domain]/
+│       ├── domain/       # Interfaces & types
+│       ├── infrastructure/  # Repositories, mappers, API clients
+│       ├── application/  # Use cases (*.usecase.ts)
+│       └── components/   # Domain-specific React components
+│
+├── shared/               # Atoms → Molecules → Organisms → Templates
+├── lib/                  # Prisma client, axios interceptor, SEO utils
+├── context/ & store/     # Zustand stores
+└── infrastructure/api/   # BaseAPI + client-side API classes
+```
+
+**Auth:** JWT access token (15m) + refresh token (7d) in httpOnly cookies. Refresh logic in `src/proxy.ts`.
+
+**Database:** Soft deletes on all core entities (`isDeleted` + `deletedAt`). `totalPrice` always computed server-side.
+
+**CSP:** Nonce-based Content Security Policy generated per request.
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20+
+- PostgreSQL database
+
+### Install
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Prisma client is auto-generated via `postinstall`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create `.env.local`:
 
-## Learn More
+```env
+DATABASE_URL=postgresql://...
+JWT_SECRET=
+JWT_ACCESS_EXPIRY=15m
+JWT_REFRESH_EXPIRY=7d
+NEXT_PUBLIC_API=http://localhost:3000
+GITHUB_TOKEN=
+GITHUB_OWNER=
+GITHUB_REPO=
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Database
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npx prisma migrate dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Run
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-# web-services
->>>>>>> 8de271f8c463e551cbd76522c2e66e8a2068129e
+```bash
+npm run dev       # dev server → http://localhost:3000
+npm run build     # production build
+npm run check     # lint + type-check
+npm run test      # vitest
+```
