@@ -10,8 +10,12 @@ import { ServiceOrderItemImpl } from "@/modules/orders/infrastructure/ServiceOrd
 import { IOrdersQueryParams } from "@/modules/orders/domain/types/order.types";
 import { TaskRepositoryImpl } from "@/modules/tasks/infrastructure/task.repository";
 import { GithubServices } from "@/modules/features/github/application/usecase/GithubServices";
+import { requireAuth } from "@/lib/requireAuth";
 
 export async function GET(request: NextRequest) {
+  const auth = await requireAuth();
+  if (!auth.ok) return auth.response;
+
   try {
     const q = request.nextUrl.searchParams;
     const direction = q.get("direction");
@@ -48,6 +52,9 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const auth = await requireAuth();
+  if (!auth.ok) return auth.response;
+
   try {
     const body = await request.json();
     // const db = new PrismaClient();

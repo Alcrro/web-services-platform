@@ -2,11 +2,15 @@ import { OrderRepositoryImplementation } from "@/modules/orders/infrastructure/o
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { FindOne } from "@/modules/orders/application/use-cases/findOne.usecase";
+import { requireAuth } from "@/lib/requireAuth";
 
 interface Params {
   params: Promise<{ id: string }>;
 }
 export async function GET(_req: NextRequest, { params }: Params) {
+  const auth = await requireAuth();
+  if (!auth.ok) return auth.response;
+
   try {
     const { id } = await params;
 

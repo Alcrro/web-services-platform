@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Octokit } from "octokit";
+import { requireAuth } from "@/lib/requireAuth";
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
@@ -7,6 +8,8 @@ const owner = process.env.GITHUB_OWNER!;
 const repo = process.env.GITHUB_REPO!;
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAuth();
+  if (!auth.ok) return auth.response;
   const body = await req.json();
   const { title, body: description } = body;
 
