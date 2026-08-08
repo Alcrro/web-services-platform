@@ -5,6 +5,9 @@ import ThemeProvider from "@/context/ThemeProvider";
 import ReactQueryProvider from "../shared/hooks/ReactQueryProvider";
 import { ToastContainer } from "react-toastify";
 import { headers } from "next/headers";
+import Script from "next/script";
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,6 +51,18 @@ export default async function RootLayout({
         </ThemeProvider>
 
         <ToastContainer />
+
+        {GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga-init" strategy="afterInteractive">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
+            </Script>
+          </>
+        )}
       </body>
     </html>
   );
