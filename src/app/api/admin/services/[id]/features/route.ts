@@ -4,6 +4,7 @@ import { UpsertServiceFeature } from "@/modules/services/application/usecases/Up
 import { ServiceRepositImpl } from "@/modules/services/infrastructure/service.repository";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { requireAuth } from "@/lib/requireAuth";
 
 const upsertSchema = z.object({
   featureId: z.string().optional(),
@@ -19,6 +20,9 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = await requireAuth();
+  if (!auth.ok) return auth.response;
+
   try {
     const { id: uniqueId } = await params;
     const body = await req.json();

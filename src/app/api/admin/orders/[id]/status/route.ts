@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod/v4";
 import { prisma } from "@/lib/prisma";
 import { OrderRepositoryImplementation } from "@/modules/orders/infrastructure/order.repository";
+import { requireAuth } from "@/lib/requireAuth";
 
 const schema = z.object({
   status: z.enum(["PENDING_REVIEW", "NEW", "IN_PROGRESS", "IN_DISCUSSION", "APPROVED", "DONE"]),
@@ -11,6 +12,9 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = await requireAuth();
+  if (!auth.ok) return auth.response;
+
   const { id } = await params;
   const body = await req.json().catch(() => null);
   const parsed = schema.safeParse(body);

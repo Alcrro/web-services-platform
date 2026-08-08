@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod/v4";
 import { prisma } from "@/lib/prisma";
 import { anthropic } from "@/lib/anthropic";
+import { requireAuth } from "@/lib/requireAuth";
+import { checkRateLimit } from "@/lib/ratelimit";
 
 const schema = z.object({
   notes: z.string().min(1).max(5000),
@@ -12,6 +14,14 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = await requireAuth();
+  if (!auth.ok) return auth.response;
+
+  const rl = await checkRateLimit(req, "ai");
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
+
   const { id: orderId } = await params;
 
   const order = await prisma.serviceOrder.findUnique({

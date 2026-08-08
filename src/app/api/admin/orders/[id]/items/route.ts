@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod/v4";
 import { prisma } from "@/lib/prisma";
+import { requireAuth } from "@/lib/requireAuth";
 
 const schema = z.object({
   name: z.string().min(1).max(200),
@@ -15,6 +16,9 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = await requireAuth();
+  if (!auth.ok) return auth.response;
+
   const { id: orderId } = await params;
 
   const order = await prisma.serviceOrder.findUnique({ where: { id: orderId } });

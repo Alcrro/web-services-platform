@@ -5,6 +5,7 @@ import { UpsertServiceFeature } from "@/modules/services/application/usecases/Up
 import { ServiceRepositImpl } from "@/modules/services/infrastructure/service.repository";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { requireAuth } from "@/lib/requireAuth";
 
 const updateSchema = z.object({
   type: z.enum(["STANDARD", "OPTIONAL", "OTHER"]),
@@ -18,6 +19,9 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string; featureId: string }> }
 ) {
+  const auth = await requireAuth();
+  if (!auth.ok) return auth.response;
+
   try {
     const { id: uniqueId, featureId } = await params;
     const body = await req.json();
@@ -48,6 +52,9 @@ export async function DELETE(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string; featureId: string }> }
 ) {
+  const auth = await requireAuth();
+  if (!auth.ok) return auth.response;
+
   try {
     const { id: uniqueId, featureId } = await params;
 

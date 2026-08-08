@@ -2,11 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod/v4";
 import { prisma } from "@/lib/prisma";
 import { generateDiscussionSummary } from "@/lib/anthropic";
+import { requireAuth } from "@/lib/requireAuth";
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = await requireAuth();
+  if (!auth.ok) return auth.response;
+
   const { id: orderId } = await params;
 
   const order = await prisma.serviceOrder.findUnique({ where: { id: orderId } });
@@ -34,6 +38,9 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = await requireAuth();
+  if (!auth.ok) return auth.response;
+
   const { id: orderId } = await params;
 
   const order = await prisma.serviceOrder.findUnique({ where: { id: orderId } });

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod/v4";
 import { prisma } from "@/lib/prisma";
 import { generateDiscussionSummary } from "@/lib/anthropic";
+import { requireAuth } from "@/lib/requireAuth";
 
 const updateSchema = z.object({
   notes: z.string().max(5000),
@@ -11,6 +12,9 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string; discussionId: string }> }
 ) {
+  const auth = await requireAuth();
+  if (!auth.ok) return auth.response;
+
   const { id: orderId, discussionId } = await params;
 
   const discussion = await prisma.orderDiscussion.findUnique({ where: { id: discussionId } });
