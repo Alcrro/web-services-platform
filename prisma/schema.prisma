@@ -260,3 +260,32 @@ model UiNotification {
 
   @@map("ui_notifications") // optional, dacă vrei un nume custom pentru tabel
 }
+
+enum ApplicationStatus {
+  APPLIED
+  INTERVIEW
+  WON
+  LOST
+  NO_RESPONSE
+}
+
+model Application {
+  id          String            @id @default(uuid())
+  platform    String
+  projectName String
+  clientName  String?
+  status      ApplicationStatus @default(APPLIED)
+  budget      Decimal?
+  currency    String            @default("EUR")
+  appliedAt   DateTime          @default(now())
+  respondedAt DateTime?
+  closedAt    DateTime?
+  link        String?
+  rawInput    String?
+  aiAnalysis  Json?
+  notes       String?
+  isDeleted   Boolean           @default(false)
+  deletedAt   DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @default(now()) @updatedAt
+}
