@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod/v4";
 import { prisma } from "@/lib/prisma";
 import { ServiceOrderStatus } from "@prisma/client";
+import { checkRateLimit } from "@/lib/ratelimit";
 
 const schema = z.object({
   name: z.string().min(2).max(100),
@@ -12,6 +13,11 @@ const schema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  const rl = await checkRateLimit(req, "publicForm");
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
+
   const body = await req.json().catch(() => null);
   const parsed = schema.safeParse(body);
 

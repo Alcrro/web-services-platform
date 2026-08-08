@@ -4,8 +4,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { Login } from "@/modules/auth/application/Login.usecase";
 import { AuthRepositoryImpl } from "@/modules/auth/infrastructure/auth.repository";
+import { checkRateLimit } from "@/lib/ratelimit";
 
 export async function POST(req: NextRequest) {
+  const rl = await checkRateLimit(req, "auth");
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
+
   try {
     const { email, password } = await req.json();
     const userAgent = req.headers.get("user-agent") || "unknown";

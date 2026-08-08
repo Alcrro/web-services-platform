@@ -1,8 +1,14 @@
 import { prisma } from "@/lib/prisma";
 import { BcryptServices } from "@/services/bcrypt/BcryptServices";
 import { NextRequest, NextResponse } from "next/server";
+import { checkRateLimit } from "@/lib/ratelimit";
 
 export async function POST(req: NextRequest) {
+  const rl = await checkRateLimit(req, "auth");
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
+
   try {
     const bcryptService = new BcryptServices();
     const body = await req.json();

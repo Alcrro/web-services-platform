@@ -3,8 +3,14 @@ import { AuthRepositoryImpl } from "@/modules/auth/infrastructure/auth.repositor
 import { JWTTokenServices } from "@/services/token/JWTToken";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { checkRateLimit } from "@/lib/ratelimit";
 
 export async function POST(req: NextRequest) {
+  const rl = await checkRateLimit(req, "auth");
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
+
   try {
     const jwtTokenService = new JWTTokenServices();
 
